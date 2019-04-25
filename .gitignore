@@ -34,3 +34,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+\.DS_Store
+
+*.meta
+
+Logs/Packages-Update\.log
