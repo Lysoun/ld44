@@ -58,23 +58,31 @@ public class CombatManager : MonoBehaviour
     #region PUBLIC FUNCTION
 
     /// <summary>
-    /// Functions to be called to tell the CombatController that the initialization process is finished.
-    /// Has to be call by every GameObject that reveiced an Init() call.
+    /// Functions to be called to tell the CombatController that the a process is finished.
     /// </summary>
-    /// <param name="go">The gameobject who has finished his initialization.</param>
-    public void Init_Finish(GameObject go)
+    /// <param name="go">The gameobject that finished a process.</param>
+    /// <param name="finished_state">The state process finished.</param>
+    public void StateFinish(GameObject go, Combat_State finished_state)
     {
+        ActiveCard temp_activeCard = go.GetComponent<ActiveCard>();
+        if (temp_activeCard != null)
+        {
+            switch (finished_state)
+            {
+                case Combat_State.Init:
+                    activeCard_initialized = true;
+                    break;
+                case Combat_State.Begin_Turn:
+                    activeCard_beginTurnReady = true;
+                    break;
+                case Combat_State.End_Turn:
+                    activeCard_endTurnReady = true;
+                    break;
+            }
+            return;
+        }
 
-    }
-
-    /// <summary>
-    /// Functions to be called to tell the CombatController that the begin_turn is finished.
-    /// Has to be call by every GameObject that reveiced an Begin_Turn() call.
-    /// </summary>
-    /// <param name="go">The gameobject who has finished his Begin Turn.</param>
-    public void Begin_Turn_Finish(GameObject go)
-    {
-
+        // TODO with the others.
     }
 
     /// <summary>
@@ -83,7 +91,7 @@ public class CombatManager : MonoBehaviour
     /// <param name="card">The card to be played.</param>
     public void Choosen_Card(Card card)
     {
-        
+        selectedCard = card.gameObject;
     }
 
     /// <summary>
@@ -91,7 +99,12 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public void Valid_Card()
     {
-
+        if (current_state != Combat_State.Card_Preview)
+        {
+            Debug.LogWarning("Bug here ! Wrong current state");
+            return;
+        }
+        ChangeState(Combat_State.Paying);
     }
 
     /// <summary>
@@ -99,7 +112,12 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public void Cancel_Card()
     {
-
+        if (current_state != Combat_State.Card_Preview)
+        {
+            Debug.LogWarning("Bug here ! Wrong current state");
+            return;
+        }
+        ChangeState(Combat_State.Player_Choose);
     }
 
     /// <summary>
@@ -108,7 +126,7 @@ public class CombatManager : MonoBehaviour
     /// <param name="value">The amount of life given by the sacrifice.</param>
     public void Sacrificed_Card(int value)
     {
-
+        activeCard.Pay(value);
     }
 
     #endregion
@@ -156,22 +174,29 @@ public class CombatManager : MonoBehaviour
 
     private void Paying()
     {
-
+        player.Sacrifice();
+        // Display buttons.
+        // Display cost text etc.
     }
 
     private void Turn_Resolution()
     {
-
+        // check first to hit.
+        // Then hit each others
     }
 
     private void End_Turn()
     {
-
+        activeCard.EndTurn();
+        monster.EndTurn();
+        player.EndTurn();
     }
 
     private void End_Combat()
     {
-
+        activeCard.EndCombat();
+        monster.EndCombat();
+        player.EndCombat();
     }
     #endregion
 
@@ -331,27 +356,6 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    public void StateFinish(GameObject go, Combat_State finished_state)
-    {
-        ActiveCard temp_activeCard = go.GetComponent<ActiveCard>();
-        if (temp_activeCard != null)
-        {
-            switch (finished_state) {
-                case Combat_State.Init:
-                    activeCard_initialized = true;
-                    break;
-                case Combat_State.Begin_Turn:
-                    activeCard_beginTurnReady = true;
-                    break;
-                case Combat_State.End_Turn:
-                    activeCard_endTurnReady = true;
-                    break;
-            }
-            return;
-        }
-
-        // TODO with the others.
-    }
     #endregion
 
 }

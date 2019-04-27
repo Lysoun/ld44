@@ -57,6 +57,7 @@ public class ActiveCard : MonoBehaviour
             DiscardCard();
         }
         card = new_card;
+        health = card.healthValue;
         cost = card.costValue;
     }
 
@@ -74,7 +75,8 @@ public class ActiveCard : MonoBehaviour
     /// </summary>
     public void DiscardCard()
     {
-
+        player.AddToDiscard(card);
+        card = null;
     }
 
     /// <summary>
@@ -96,12 +98,22 @@ public class ActiveCard : MonoBehaviour
     }
 
     /// <summary>
+    /// Pay a certain amount to substract to the cost.
+    /// </summary>
+    /// <param name="value">The amount to substract.</param>
+    public void Pay(int value)
+    {
+        cost -= value;
+    }
+
+    /// <summary>
     /// Called when the object must prepare itself for the end of the turn.
     /// Call the function StateFinish when finished.
     /// </summary>
     public void EndTurn()
     {
         // XP the card
+        card.AddXP(1);
 
         combatManager.StateFinish(this.gameObject, Combat_State.End_Turn);
     }
@@ -112,7 +124,10 @@ public class ActiveCard : MonoBehaviour
     /// </summary>
     public void EndCombat()
     {
-
+        if (card != null)
+        {
+            DiscardCard();
+        }
         combatManager.StateFinish(this.gameObject, Combat_State.End_Combat);
     }
 
