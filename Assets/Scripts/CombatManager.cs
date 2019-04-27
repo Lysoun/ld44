@@ -144,9 +144,9 @@ public class CombatManager : MonoBehaviour
         player_beginTurnReady = false;
         activeCard_beginTurnReady = false;
 
-        // monster.Init();
-        //player.Init();
-        //activeCard.Init();
+        monster.Init();
+        player.Init();
+        activeCard.Init();
     }
 
     private void Begin_Turn()

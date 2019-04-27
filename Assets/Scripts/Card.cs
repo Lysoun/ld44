@@ -46,6 +46,7 @@ public class Card : MonoBehaviour
     /// </summary>
     public RawImage artwork;
 
+    public GameObject graphicsChildren;
     ///////////////////////////////////////////////////////////////////
     /// Values of the different stats.
     /// 
@@ -109,6 +110,17 @@ public class Card : MonoBehaviour
 
         artwork.texture = artworkImage;
     }
+
+    public void Hide()
+    {
+        graphicsChildren.SetActive(false);
+    }
+
+    public void Display()
+    {
+        graphicsChildren.SetActive(true);
+    }
+
 
     ///////////////////////////////////////////////////////////////////
     /// Getter of all the statistics.

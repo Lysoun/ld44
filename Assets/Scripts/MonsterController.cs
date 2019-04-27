@@ -17,8 +17,8 @@ public class MonsterController : MonoBehaviour
 	private string monsterName;
 	private int health;
 	private int patternIndex;
-    private GameObject healthBar;
-    private GameObject actionTarget;
+    public GameObject healthBar;
+    public GameObject actionTarget;
     private Action currentTarget;
 
     /// <summary>
@@ -32,8 +32,8 @@ public class MonsterController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        healthBar = gameObject.transform.Find("Life").gameObject;
-        actionTarget = gameObject.transform.Find("Action").gameObject;
+        //healthBar = gameObject.transform.Find("Life").gameObject;
+        //actionTarget = gameObject.transform.Find("Action").gameObject;
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
         healthBar.SetActive(false);
         actionTarget.SetActive(false);

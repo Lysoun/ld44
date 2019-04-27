@@ -11,7 +11,7 @@ public class ActiveCard : MonoBehaviour
     private Card card;
     private int health;
     private int cost;
-    private ActiveCardDisplay display;
+    public ActiveCardDisplay display;
 
     void Start()
     {
@@ -82,7 +82,7 @@ public class ActiveCard : MonoBehaviour
     /// </summary>
     public void DiscardCard()
     {
-        player.AddToDiscard(card);
+        player.DiscardCard(card);
         card = null;
         display.Hide();
     }
