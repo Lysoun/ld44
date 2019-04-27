@@ -31,8 +31,9 @@ public class Deck
 
         System.Random rand = new System.Random();
         int index = rand.Next(0, cards.Count);
-       
-        return cards[index];
+        Card drawnCard = cards[index];
+        cards.Remove(drawnCard);
+        return drawnCard;
     }
 
     public void Discard(Card card)
