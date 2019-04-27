@@ -37,6 +37,6 @@ sysinfo.txt
 
 \.DS_Store
 
-*.meta
+# *.meta
 
 Logs/Packages-Update\.log
