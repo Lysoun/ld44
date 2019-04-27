@@ -13,6 +13,7 @@ public class CardDisplay : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI atkText;
     public TextMeshProUGUI armorText;
+    public TextMeshProUGUI speedText;
 
     public TextMeshProUGUI costText;
 
@@ -22,14 +23,20 @@ public class CardDisplay : MonoBehaviour
     void Start()
     {
         System.Random rnd = new System.Random();
+        int healthValue = rnd.Next(card.healthMin, card.healthMax + 1);
+        int atkValue = rnd.Next(card.atkMin, card.atkMax + 1);
+        int armorValue = rnd.Next(card.armorMin, card.armorMax + 1);
+        int speedValue = rnd.Next(card.speedMin, card.speedMax + 1);
+        int costValue = card.cost;
 
         typeText.SetText(card.type);
 
-        healthText.SetText((card.health).ToString());
-        atkText.SetText((rnd.Next(card.atkMin, card.atkMax)).ToString());
-        armorText.SetText((rnd.Next(card.armorMin, card.armorMax)).ToString());
+        healthText.SetText(healthValue.ToString());
+        atkText.SetText(atkValue.ToString());
+        armorText.SetText(armorValue.ToString());
+        speedText.SetText(speedValue.ToString());
 
-        costText.SetText((card.cost).ToString());
+        costText.SetText(costValue.ToString());
 
         artwork.texture = card.artwork;
     }

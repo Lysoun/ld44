@@ -7,11 +7,14 @@ public class CardData : ScriptableObject
 {
     public string type;
 
-    public int health;
+    public int healthMin;
+    public int healthMax;
     public int atkMin;
     public int atkMax;
     public int armorMin;
     public int armorMax;
+    public int speedMin;
+    public int speedMax;
 
     public int cost;
 
