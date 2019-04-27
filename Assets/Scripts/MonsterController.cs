@@ -84,7 +84,7 @@ public class MonsterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown("z")) {
+        /*if(Input.GetKeyDown("z")) {
             Init();
           }
           if (Input.GetKeyDown("a")) {
@@ -101,7 +101,7 @@ public class MonsterController : MonoBehaviour
         if (Input.GetKeyDown("d"))
         {
             EndCombat();
-        }
+        }*/
     }
 
     void EndCombat()
