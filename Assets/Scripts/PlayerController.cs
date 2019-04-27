@@ -24,54 +24,65 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    public void initPlayer()
+    public void BeginTurn()
     {
-        deck.initDeck();
+        deck.Draw();
+        // TODO tell GameController when done
+    }
+
+    // TODO return value
+    public void EndCombat()
+    {
+
+    }
+
+    // TODO return value
+    public void EndTurn()
+    {
+
+    }
+
+    public int GetLifePoints()
+    {
+        return lifePoints;
+    }
+
+    public bool GoToDiscard()
+    {
+        // TODO
+        return false;
+    }
+
+    public void Init()
+    {
+        deck.Init();
         lifePoints = MAX_LIFE_POINTS;
         hand = new List<Card>();
-        initHand();
+        InitHand();
         // TODO coroutine to call GameController.initFinished(this)
     }
 
-    void initHand()
+    void InitHand()
     {
         // TODO
         // draw STARTING_HAND_SIZE cards from deck
         // deck.draw(); xSTARTING_HAND_SIZE
     }
 
-    void beginTurn()
-    {
-        deck.draw();
-    }
-
-    void play()
+    public void Play()
     {
         // TODO find a card clicked on in hand
+        // return played card
     }
 
-    bool keepActiveCard()
+    public void Sacrifice()
     {
-        // TODO
-        return false;
-    }
-
-    // TODO return value
-    void endTurn()
-    {
-
+        // TODO return sacrificed
     }
 
     // Mofify player's life points by the lp value, which can be negative or positive
-    void changeLifePoints(int lp)
+    public void TakeDamage(int lp)
     {
         lifePoints += lp;
     }
-
-    int getLifePoints()
-    {
-        return lifePoints;
-    }
-
-    // TODO Sacrifices
 }

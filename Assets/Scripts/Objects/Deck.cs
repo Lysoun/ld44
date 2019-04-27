@@ -8,13 +8,13 @@ public class Deck
     List<Card> discardPile;
 
     // TODO deck as parameter given by GameController
-    public void initDeck()
+    public void Init()
     {
         cards = new List<Card>(); // TODO put cards inside deck
         discardPile = new List<Card>();
     }
 
-    public Card draw()
+    public Card Draw()
     {
         if (cards.Count < 1)
         {
@@ -35,7 +35,7 @@ public class Deck
         return cards[index];
     }
 
-    public void discard(Card card)
+    public void Discard(Card card)
     {
         discardPile.Add(card);
     }
