@@ -57,7 +57,7 @@ public class ActiveCard : MonoBehaviour
             DiscardCard();
         }
         card = new_card;
-        cost = card.cost;
+        cost = card.costValue;
     }
 
     /// <summary>
