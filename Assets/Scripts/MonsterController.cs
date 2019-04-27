@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MonsterController : MonoBehaviour
 {
-	
+    public CombatManager combatManager;
 	public Sprite targetCard_sprite;
 	public Sprite targetPlayer_sprite;
 
@@ -63,13 +63,14 @@ public class MonsterController : MonoBehaviour
         healthBar.SetActive(true);
 
         //Send finish signal
-        CombatManager.StateFinish(this, CombatManager.State.Init);
+        combatManager.StateFinish(gameObject, Combat_State.Init);
     }
 
     /// <summary>
     /// Generate next Targer, upload visible target
     /// </summary>
     public void BeginTurn() {
+        actionTarget.GetComponent<Image>().sprite = null;
         currentTarget = (Action) System.Enum.Parse(typeof(Action), Pattern[patternIndex].ToString());
         switch(currentTarget)
         {
@@ -84,10 +85,9 @@ public class MonsterController : MonoBehaviour
                 break;
         }
 		patternIndex = (patternIndex + 1) % Pattern.Length;
-        actionTarget.GetComponent<Image>().preserveAspect = true;
         actionTarget.SetActive(true);
-		CombatManager.StateFinish(this, CombatManager.State.BeginTurn);
-	}
+        combatManager.StateFinish(gameObject, Combat_State.Begin_Turn);
+    }
 
     /// <summary>
     /// Update monster life variable and life bar
@@ -101,7 +101,7 @@ public class MonsterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if(Input.GetKeyDown("z")) {
+        if(Input.GetKeyDown("z")) {
             Init();
           }
           if (Input.GetKeyDown("a")) {
@@ -118,7 +118,7 @@ public class MonsterController : MonoBehaviour
         if (Input.GetKeyDown("d"))
         {
             EndCombat();
-        }*/
+        }
     }
 
     /// <summary>
