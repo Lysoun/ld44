@@ -144,9 +144,9 @@ public class CombatManager : MonoBehaviour
         player_beginTurnReady = false;
         activeCard_beginTurnReady = false;
 
-        monster.Init();
-        player.Init();
-        activeCard.Init();
+        // monster.Init();
+        //player.Init();
+        //activeCard.Init();
     }
 
     private void Begin_Turn()
@@ -188,7 +188,7 @@ public class CombatManager : MonoBehaviour
     private void End_Turn()
     {
         activeCard.EndTurn();
-        monster.EndTurn();
+        // monster.EndTurn();
         player.EndTurn();
     }
 
@@ -262,6 +262,7 @@ public class CombatManager : MonoBehaviour
                     monster_endTurnReady &&
                     player_endTurnReady)
                 {
+                    /*
                     if (player.health < 0 || monster.health < 0)
                     {
                         ChangeState(Combat_State.End_Combat);
@@ -269,7 +270,7 @@ public class CombatManager : MonoBehaviour
                     else
                     {
                         ChangeState(Combat_State.Begin_Turn);
-                    }
+                    }*/
                 }
                     break;
             case Combat_State.End_Combat:

@@ -57,8 +57,8 @@ public class ActiveCard : MonoBehaviour
             DiscardCard();
         }
         card = new_card;
-        health = card.healthValue;
-        cost = card.costValue;
+        health = card.getHealthValue();
+        cost = card.getCostValue();
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public class ActiveCard : MonoBehaviour
     /// </summary>
     public void DiscardCard()
     {
-        player.AddToDiscard(card);
+        //player.AddToDiscard(card);
         card = null;
     }
 
@@ -113,7 +113,7 @@ public class ActiveCard : MonoBehaviour
     public void EndTurn()
     {
         // XP the card
-        card.AddXP(1);
+        // card.AddXP(1);
 
         combatManager.StateFinish(this.gameObject, Combat_State.End_Turn);
     }

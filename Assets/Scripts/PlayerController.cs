@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
 
     public CombatManager combatManager;
 
+    public PlayerCardPicker picker;
+
+    private bool isPlaying;
+    private bool isSacrificing;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +31,9 @@ public class PlayerController : MonoBehaviour
         
     }
 
+
+
+    #region PUBLIC FUNCTIONS
     public void BeginTurn()
     {
         deck.Draw();
@@ -73,6 +81,9 @@ public class PlayerController : MonoBehaviour
         combatManager.StateFinish(this.gameObject, Combat_State.Init);
     }
 
+
+
+
     private void InitHand()
     {
         // Draw STARTING_HAND_SIZE cards from deck
@@ -82,6 +93,8 @@ public class PlayerController : MonoBehaviour
 
     public void Play()
     {
+        picker.enabled = true;
+        isPlaying = true;
         // TODO find a card clicked on in hand
         // return played card
         // combatManager.Choosen_Card(selectedCard);
@@ -90,9 +103,12 @@ public class PlayerController : MonoBehaviour
 
     public void Sacrifice()
     {
+        picker.enabled = true;
+
         // TODO return sacrificed
         // pick a card and give it to sacrifice
-        Card card = pickedCard;
+        //Card card = pickedCard();
+        Card card = null;
         combatManager.Sacrificed_Card(card.getCostValue());
         hand.Remove(card);
         Destroy(card.gameObject);
@@ -102,5 +118,31 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int lp)
     {
         lifePoints += lp;
+    }
+
+    #endregion
+
+    public void PickedCard(GameObject card)
+    {
+        picker.enabled = false;
+
+        if (isPlaying)
+        {
+            isPlaying = false;
+            combatManager.Choosen_Card(card.GetComponent<Card>());
+            combatManager.StateFinish(this.gameObject, Combat_State.Player_Choose);
+        }
+        else if (isSacrificing)
+        {
+            isSacrificing = false;
+            combatManager.Sacrificed_Card(card.GetComponent<Card>().getCostValue());
+            // deck.destroy(card);
+            combatManager.StateFinish(this.gameObject, Combat_State.Sacrifising);
+        }
+        else
+        {
+            Debug.Log("WTF ?!");
+        }
+        
     }
 }

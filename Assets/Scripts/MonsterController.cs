@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MonsterController : MonoBehaviour
 {
-	
+    public CombatManager combatManager;
 	public Sprite targetCard_sprite;
 	public Sprite targetPlayer_sprite;
 
@@ -63,7 +63,7 @@ public class MonsterController : MonoBehaviour
         healthBar.SetActive(true);
 
         //Send finish signal
-        CombatManager.StateFinish(this, CombatManager.State.Init);
+        combatManager.StateFinish(this.gameObject, Combat_State.Init);
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public class MonsterController : MonoBehaviour
 		patternIndex = (patternIndex + 1) % Pattern.Length;
         actionTarget.GetComponent<Image>().preserveAspect = true;
         actionTarget.SetActive(true);
-		CombatManager.StateFinish(this, CombatManager.State.BeginTurn);
+		combatManager.StateFinish(this.gameObject, Combat_State.Begin_Turn);
 	}
 
     /// <summary>
