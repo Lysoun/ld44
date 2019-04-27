@@ -6,7 +6,7 @@ public class ActiveCard : MonoBehaviour
 {
     public CombatManager combatManager;
     public PlayerController player;
-
+     
 
     private Card card;
     private int health;
