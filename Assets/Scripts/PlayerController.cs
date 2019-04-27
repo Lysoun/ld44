@@ -8,9 +8,11 @@ public class PlayerController : MonoBehaviour
     const int STARTING_HAND_SIZE = 5;
 
     private int lifePoints;
-    private int activeCard; // TODO ActiveCardController
+    private Card activeCard; // TODO ActiveCardController
     private List<Card> hand;
     Deck deck; // deck has discard pile
+
+    public CombatManager combatManager;
 
     // Start is called before the first frame update
     void Start()
@@ -27,19 +29,21 @@ public class PlayerController : MonoBehaviour
     public void BeginTurn()
     {
         deck.Draw();
-        // TODO tell GameController when done
+        combatManager.StateFinish(this.gameObject, Combat_State.Begin_Turn);
     }
 
     // TODO return value
     public void EndCombat()
     {
-
+        combatManager.StateFinish(this.gameObject, Combat_State.End_Combat);
     }
 
-    // TODO return value
     public void EndTurn()
     {
-
+        // discard active card
+        deck.Discard(activeCard);
+        activeCard = null;
+        combatManager.StateFinish(this.gameObject, Combat_State.End_Turn);
     }
 
     public int GetLifePoints()
@@ -47,37 +51,51 @@ public class PlayerController : MonoBehaviour
         return lifePoints;
     }
 
-    public bool GoToDiscard()
+    public void DiscardCard(Card card)
     {
-        // TODO
-        return false;
+        deck.Discard(card);
+        // combatManager.StateFinish(this.gameObject, Combat_State.)
     }
 
     public void Init()
     {
+        // Init deck
         deck.Init();
+
+        // Init life points
         lifePoints = MAX_LIFE_POINTS;
+
+        // Init hand
         hand = new List<Card>();
         InitHand();
-        // TODO coroutine to call GameController.initFinished(this)
+
+        // Telling the combat manager that I'm done with init
+        combatManager.StateFinish(this.gameObject, Combat_State.Init);
     }
 
-    void InitHand()
+    private void InitHand()
     {
-        // TODO
-        // draw STARTING_HAND_SIZE cards from deck
-        // deck.draw(); xSTARTING_HAND_SIZE
+        // Draw STARTING_HAND_SIZE cards from deck
+        for (int i = 0; i < STARTING_HAND_SIZE; i++)
+            deck.Draw();
     }
 
     public void Play()
     {
         // TODO find a card clicked on in hand
         // return played card
+        // combatManager.Choosen_Card(selectedCard);
+        // combatManager.StateFinish(this.gameObject, Combat_State.Player_Choose);
     }
 
     public void Sacrifice()
     {
         // TODO return sacrificed
+        // pick a card and give it to sacrifice
+        Card card = pickedCard;
+        combatManager.Sacrificed_Card(card.getCostValue());
+        hand.Remove(card);
+        Destroy(card.gameObject);
     }
 
     // Mofify player's life points by the lp value, which can be negative or positive
