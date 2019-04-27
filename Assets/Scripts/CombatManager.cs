@@ -20,7 +20,7 @@ public class CombatManager : MonoBehaviour
  
     public MonsterController monster;
     public PlayerController player;
-    public ActiveCardController activeCard;
+    public ActiveCard activeCard;
 
     public Combat_State current_state;
 
@@ -47,7 +47,6 @@ public class CombatManager : MonoBehaviour
     {
         ChangeState(Combat_State.Init);
 
-        
     }
 
     // Update is called once per frame
@@ -138,9 +137,9 @@ public class CombatManager : MonoBehaviour
         player_beginTurnReady = false;
         activeCard_beginTurnReady = false;
 
-        monster.Begin_Turn();
-        player.Begin_Turn();
-        activeCard.Begin_Turn();
+        monster.BeginTurn();
+        player.BeginTurn();
+        activeCard.BeginTurn();
     }
 
     private void Player_Choose()
@@ -220,12 +219,14 @@ public class CombatManager : MonoBehaviour
             case Combat_State.Paying:
                 if (activeCard.RemainingCost() < 0)
                 {
-                    ChangeState(Combat_State.Combat_Resolution);
+                    ChangeState(Combat_State.Turn_Resolution);
                 }
                 break;
 
             case Combat_State.Turn_Resolution:
-                if (turn_finished)
+                if (activeCard_endTurnReady &&
+                    monster_endTurnReady &&
+                    player_endTurnReady)
                 {
                     ChangeState(Combat_State.End_Turn);
                 }
@@ -251,7 +252,7 @@ public class CombatManager : MonoBehaviour
                 break;
 
             default:
-                Debug.log("A good bug here !");
+                Debug.Log("A good bug here !");
                 break;
         }
     }
@@ -288,7 +289,7 @@ public class CombatManager : MonoBehaviour
                 break;
 
             default:
-                Debug.log("A good bug here !");
+                Debug.Log("A good bug here !");
                 break;
         }
 
@@ -302,7 +303,7 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            Debug.log("Bug ! Should not be able to push that button !");
+            Debug.Log("Bug ! Should not be able to push that button !");
         }
     }
 
@@ -314,7 +315,7 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            Debug.log("Bug ! Should not be able to push that button !");
+            Debug.Log("Bug ! Should not be able to push that button !");
         }
     }
 
@@ -326,10 +327,31 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            Debug.log("Bug ! Should not be able to push that button !");
+            Debug.Log("Bug ! Should not be able to push that button !");
         }
     }
-    
+
+    public void StateFinish(GameObject go, Combat_State finished_state)
+    {
+        ActiveCard temp_activeCard = go.GetComponent<ActiveCard>();
+        if (temp_activeCard != null)
+        {
+            switch (finished_state) {
+                case Combat_State.Init:
+                    activeCard_initialized = true;
+                    break;
+                case Combat_State.Begin_Turn:
+                    activeCard_beginTurnReady = true;
+                    break;
+                case Combat_State.End_Turn:
+                    activeCard_endTurnReady = true;
+                    break;
+            }
+            return;
+        }
+
+        // TODO with the others.
+    }
     #endregion
 
 }
