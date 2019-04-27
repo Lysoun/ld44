@@ -4,13 +4,15 @@ using UnityEngine;
 
 public enum Combat_State
 {
+    Init,
     Begin_Turn,
     Player_Choose,
     Card_Preview,
     Paying,
     Sacrifising,
-    Combat_Resolution,
-    End_Turn
+    Turn_Resolution,
+    End_Turn,
+    End_Combat
 }
 
 public class CombatManager : MonoBehaviour
@@ -20,53 +22,38 @@ public class CombatManager : MonoBehaviour
     public PlayerController player;
     public ActiveCardController activeCard;
 
-
     public Combat_State current_state;
+
+
+    private GameObject selectedCard;
+
+    private bool monster_initialized;
+    private bool player_initialized;
+    private bool activeCard_initialized;
+
+    private bool monster_beginTurnReady;
+    private bool player_beginTurnReady;
+    private bool activeCard_beginTurnReady;
+
+    private bool monster_endTurnReady;
+    private bool player_endTurnReady;
+    private bool activeCard_endTurnReady;
+
+    private bool combat_finished;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        /**
-         * activeCard is set empty
-         * player initialize
-         * monster initialize
-         * 
-         * current_state is set to begin turn
-        **/
+        ChangeState(Combat_State.Init);
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*
-        switch (current_state)
-        {
-            case Combat_State.Begin_Turn:
-
-                break;
-            case Combat_State.Begin_Turn:
-
-                break;
-            case Combat_State.Begin_Turn:
-
-                break;
-            case Combat_State.Begin_Turn:
-
-                break;
-            case Combat_State.Begin_Turn:
-
-                break;
-            case Combat_State.Begin_Turn:
-
-                break;
-            case Combat_State.Begin_Turn:
-
-                break;
-            default:
-
-                break;
-        }*/
+        
     }
 
     
@@ -129,42 +116,185 @@ public class CombatManager : MonoBehaviour
 
     #endregion
 
-    #region PRIVATE FUNCTION
-    private void New_State(Combat_State state)
+    #region STATE START FUNCTIONS
+    private void Init()
     {
-        current_state = state;
-        switch (state)
+        current_state = Combat_State.Init;
+
+        monster_initialized = false;
+        player_initialized = false;
+        activeCard_initialized = false;
+
+        monster_beginTurnReady = false;
+        player_beginTurnReady = false;
+        activeCard_beginTurnReady = false;
+
+        monster.Init();
+        player.Init();
+        activeCard.Init();
+    }
+
+    private void Begin_Turn()
+    {
+        monster_beginTurnReady = false;
+        player_beginTurnReady = false;
+        activeCard_beginTurnReady = false;
+
+        monster.Begin_Turn();
+        player.Begin_Turn();
+        activeCard.Begin_Turn();
+    }
+
+    private void Player_Choose()
+    {
+        selectedCard = null;
+        player.Play();
+    }
+
+    private void Card_Preview()
+    {
+        // Start preview of selected card
+        // Activation of the button pay what is left to pay.
+    }
+
+    private void Paying()
+    {
+
+    }
+
+    private void Turn_Resolution()
+    {
+
+    }
+
+    private void End_Turn()
+    {
+
+    }
+
+    private void End_Combat()
+    {
+
+    }
+    #endregion
+
+    #region STATE UPDATE FUNCTIONS
+
+    #endregion
+
+    #region STATE CONDITIONS CHANGE
+    private void TestChangeState()
+    {
+        switch (current_state)
         {
-            case Combat_State.Begin_Turn:
-                // Player draw
-                // Monster display next move
+            case Combat_State.Init:
+                if (activeCard_initialized &&
+                    monster_initialized &&
+                    player_initialized)
+                {
+                    ChangeState(Combat_State.Begin_Turn);
+                }
                 break;
+
+            case Combat_State.Begin_Turn:
+                if (activeCard_beginTurnReady &&
+                    monster_beginTurnReady &&
+                    player_beginTurnReady)
+                {
+                    ChangeState(Combat_State.Player_Choose);
+                }
+                break;
+
             case Combat_State.Player_Choose:
-                // Wait to the player to choose a card
+                if (selectedCard != null && 
+                    selectedCard.GetComponent<Card>() != null)
+                {
+                    ChangeState(Combat_State.Card_Preview);
+                }
                 break;
-            case Combat_State.Card_Preview:
-                // Show the choosen card to preview.
-                // Display two buttons : play or cancel
-                break;
+
+            //case Combat_State.Card_Preview: 
+                // break;
+                // No need because of the functions Valid() and Cancel() which do the change
+                
+            // SacrificeCard() redo the change to paying.
+            // The button call the function PayWithLife() does the change too.
             case Combat_State.Paying:
-                // Active card = choosen card
-                // Remove card form player
-                // Actualize text, cost and buttons
+                if (activeCard.RemainingCost() < 0)
+                {
+                    ChangeState(Combat_State.Combat_Resolution);
+                }
+                break;
 
+            case Combat_State.Turn_Resolution:
+                if (turn_finished)
+                {
+                    ChangeState(Combat_State.End_Turn);
+                }
                 break;
-            case Combat_State.Sacrifising:
-                // 
-                break;
-            case Combat_State.Begin_Turn:
 
+            case Combat_State.End_Turn:
+                if (activeCard_endTurnReady &&
+                    monster_endTurnReady &&
+                    player_endTurnReady)
+                {
+                    if (player.health < 0 || monster.health < 0)
+                    {
+                        ChangeState(Combat_State.End_Combat);
+                    }
+                    else
+                    {
+                        ChangeState(Combat_State.Begin_Turn);
+                    }
+                }
+                    break;
+            case Combat_State.End_Combat:
+                // Cant leave this state.
                 break;
-            case Combat_State.Begin_Turn:
 
-                break;
             default:
-
+                Debug.log("A good bug here !");
                 break;
         }
     }
+
+    private void ChangeState(Combat_State new_state)
+    {
+        current_state = new_state;
+
+        switch (current_state)
+        {
+            case Combat_State.Init:
+                Init();
+                break;
+            case Combat_State.Begin_Turn:
+                Begin_Turn();
+                break;
+            case Combat_State.Player_Choose:
+                Player_Choose();
+                break;
+            case Combat_State.Card_Preview:
+                Card_Preview();
+                break;
+            case Combat_State.Paying:
+                Paying();
+                break;
+            case Combat_State.Turn_Resolution:
+                Turn_Resolution();
+                break;
+            case Combat_State.End_Turn:
+                End_Turn();
+                break;
+            case Combat_State.End_Combat:
+                End_Combat();
+                break;
+
+            default:
+                Debug.log("A good bug here !");
+                break;
+        }
+
+    }
     #endregion
+
 }
