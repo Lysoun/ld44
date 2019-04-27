@@ -8,17 +8,14 @@ public class PlayerController : MonoBehaviour
     const int STARTING_HAND_SIZE = 5;
 
     private int lifePoints;
-    private int activeCard; // TODO Card object
-    private int[] hand; // TODO Card type
-    private int[] deck; // TODO Deck type
-    private int[] discard; // TODO Discard type
+    private int activeCard; // TODO ActiveCardController
+    private List<Card> hand;
+    Deck deck; // deck has discard pile
 
     // Start is called before the first frame update
     void Start()
     {
-        lifePoints = MAX_LIFE_POINTS;
-        hand = new int[STARTING_HAND_SIZE];
-        initializeHand();
+       
     }
 
     // Update is called once per frame
@@ -27,17 +24,42 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    public void initPlayer()
+    {
+        deck.initDeck();
+        lifePoints = MAX_LIFE_POINTS;
+        hand = new List<Card>();
+        initHand();
+        // TODO coroutine to call GameController.initFinished(this)
+    }
+
+    void initHand()
+    {
+        // TODO
+        // draw STARTING_HAND_SIZE cards from deck
+        // deck.draw(); xSTARTING_HAND_SIZE
+    }
+
+    void beginTurn()
+    {
+        deck.draw();
+    }
+
     void play()
     {
-        if (isAlive())
-        {
-            // TODO play new turn
-            playCard(0); // TODO choose card;
-        }
-        else
-        {
-            // TODO trigger end of game --> you lose
-        }
+        // TODO find a card clicked on in hand
+    }
+
+    bool keepActiveCard()
+    {
+        // TODO
+        return false;
+    }
+
+    // TODO return value
+    void endTurn()
+    {
+
     }
 
     // Mofify player's life points by the lp value, which can be negative or positive
@@ -46,30 +68,10 @@ public class PlayerController : MonoBehaviour
         lifePoints += lp;
     }
 
-    void initializeHand()
+    int getLifePoints()
     {
-        // TODO
-        // draw STARTING_HAND_SIZE cards from deck
-        // deck.draw(STARTING_HAND_SIZE);
+        return lifePoints;
     }
 
-    // TODO change prototype to accept a card clicked on in hand
-    void playCard(int card)
-    {
-        if (activeCard != null)
-        {
-            // TODO cardsInHand.remove(card);
-            activeCard = card;
-        } else
-        {
-            // TODO display cannot play card
-            // OR 
-            // do not allow card selection in hand while there is an active card
-        }
-    }
-
-    bool isAlive()
-    {
-        return lifePoints > 0;
-    }
+    // TODO Sacrifices
 }
