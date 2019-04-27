@@ -17,7 +17,7 @@ public enum Combat_State
 
 public class CombatManager : MonoBehaviour
 {
-
+ 
     public MonsterController monster;
     public PlayerController player;
     public ActiveCardController activeCard;
@@ -53,10 +53,8 @@ public class CombatManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        TestChangeState();
     }
-
-    
 
     #region PUBLIC FUNCTION
 
@@ -295,6 +293,43 @@ public class CombatManager : MonoBehaviour
         }
 
     }
+
+    public void SubmitCard()
+    {
+        if (current_state == Combat_State.Card_Preview)
+        {
+            ChangeState(Combat_State.Paying);
+        }
+        else
+        {
+            Debug.log("Bug ! Should not be able to push that button !");
+        }
+    }
+
+    public void CancelCard()
+    {
+        if (current_state == Combat_State.Card_Preview)
+        {
+            ChangeState(Combat_State.Player_Choose);
+        }
+        else
+        {
+            Debug.log("Bug ! Should not be able to push that button !");
+        }
+    }
+
+    public void PayWithHealth()
+    {
+        if (current_state == Combat_State.Paying)
+        {
+            ChangeState(Combat_State.Turn_Resolution);
+        }
+        else
+        {
+            Debug.log("Bug ! Should not be able to push that button !");
+        }
+    }
+    
     #endregion
 
 }
