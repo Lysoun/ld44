@@ -47,48 +47,50 @@ public class Card : MonoBehaviour
     public RawImage artwork;
 
     ///////////////////////////////////////////////////////////////////
-    // Values of the different stats.
+    /// Values of the different stats.
+    /// 
 
     /// <summary>
     /// Type of the card.
     /// </summary>
-    public string typeValue;
+    private string typeValue;
 
     /// <summary>
     /// Health of the card.
     /// </summary>
-    public int healthValue;
+    private int healthValue;
 
     /// <summary>
     /// Attack of the card.
     /// </summary>
-    public int atkValue;
+    private int atkValue;
 
     /// <summary>
     /// Armor of the card.
     /// </summary>
-    public int armorValue;
+    private int armorValue;
 
     /// <summary>
     /// Speed of the card.
     /// </summary>
-    public int speedValue;
+    private int speedValue;
 
     /// <summary>
     /// Cost of the card.
     /// </summary>
-    public int costValue;
+    private int costValue;
 
     /// <summary>
     /// Artwork of the card.
     /// </summary>
-    public Texture artworkImage;
+    private Texture artworkImage;
     
     
     // Initialize the content of the card prefab.
     void Start()
     {
         System.Random rnd = new System.Random();
+        typeValue = card.type;
         healthValue = rnd.Next(card.healthMin, card.healthMax + 1);
         atkValue = rnd.Next(card.atkMin, card.atkMax + 1);
         armorValue = rnd.Next(card.armorMin, card.armorMax + 1);
@@ -96,7 +98,7 @@ public class Card : MonoBehaviour
         costValue = card.cost;
         artworkImage = card.artwork;
 
-        typeText.SetText(card.type);
+        typeText.SetText(typeValue);
 
         healthText.SetText(healthValue.ToString());
         atkText.SetText(atkValue.ToString());
@@ -108,5 +110,77 @@ public class Card : MonoBehaviour
         artwork.texture = artworkImage;
     }
 
+    ///////////////////////////////////////////////////////////////////
+    /// Getter of all the statistics.
+    /// 
 
+    /// <summary>
+    /// Return the type value of the card.
+    /// </summary>
+    public string getTypeValue()
+    {
+        return typeValue;
+    }
+
+    /// <summary>
+    /// Return the type value of the card.
+    /// </summary>
+    public int getHealthValue()
+    {
+        return healthValue;
+    }
+
+    /// <summary>
+    /// Return the attack value of the card.
+    /// </summary>
+    public int getAttackValue()
+    {
+        return atkValue;
+    }
+
+    /// <summary>
+    /// Return the armor value of the card.
+    /// </summary>
+    public int getArmorValue()
+    {
+        return armorValue;
+    }
+
+    /// <summary>
+    /// Return the type value of the card.
+    /// </summary>
+    public int getSpeedValue()
+    {
+        return speedValue;
+    }
+
+    /// <summary>
+    /// Return the type value of the card.
+    /// </summary>
+    public int getCostValue()
+    {
+        return costValue;
+    }
+
+    /// <summary>
+    /// Return the artwork image of the card.
+    /// </summary>
+    public Texture getArtworkImage()
+    {
+        return artworkImage;
+    }
+
+    ///////////////////////////////////////////////////////////////////
+    /// Setter of the modifiable statistics.
+    /// 
+     
+    /// <summary>
+    /// Set the health value at the given value.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public void SetHealthValue(int value)
+    {
+        healthValue = value;
+    }
 }
