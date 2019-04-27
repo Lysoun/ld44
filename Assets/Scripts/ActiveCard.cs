@@ -11,6 +11,12 @@ public class ActiveCard : MonoBehaviour
     private Card card;
     private int health;
     private int cost;
+    private ActiveCardDisplay display;
+
+    void Start()
+    {
+        display = GetComponent<ActiveCardDisplay>();
+    }
 
     #region PUBLIC FUNCTIONS
 
@@ -31,7 +37,7 @@ public class ActiveCard : MonoBehaviour
     public void Init()
     {
         card = null;
-
+        display.Hide();
         combatManager.StateFinish(this.gameObject, Combat_State.Init);
     }
 
@@ -57,8 +63,9 @@ public class ActiveCard : MonoBehaviour
             DiscardCard();
         }
         card = new_card;
-        health = card.healthValue;
-        cost = card.costValue;
+        health = card.getHealthValue();
+        cost = card.getCostValue();
+        display.Display();
     }
 
     /// <summary>
@@ -75,8 +82,9 @@ public class ActiveCard : MonoBehaviour
     /// </summary>
     public void DiscardCard()
     {
-        player.AddToDiscard(card);
+        player.DiscardCard(card);
         card = null;
+        display.Hide();
     }
 
     /// <summary>
@@ -86,6 +94,7 @@ public class ActiveCard : MonoBehaviour
     {
         Destroy(card.gameObject);
         card = null;
+        display.Hide();
     }
 
     /// <summary>
