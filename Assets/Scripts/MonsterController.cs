@@ -63,7 +63,7 @@ public class MonsterController : MonoBehaviour
         healthBar.SetActive(true);
 
         //Send finish signal
-        combatManager.StateFinish(gameObject, Combat_State.Init);
+        combatManager.StateFinish(this.gameObject, Combat_State.Init);
     }
 
     /// <summary>
@@ -86,8 +86,8 @@ public class MonsterController : MonoBehaviour
         }
 		patternIndex = (patternIndex + 1) % Pattern.Length;
         actionTarget.SetActive(true);
-        combatManager.StateFinish(gameObject, Combat_State.Begin_Turn);
-    }
+		combatManager.StateFinish(this.gameObject, Combat_State.Begin_Turn);
+	}
 
     /// <summary>
     /// Update monster life variable and life bar
