@@ -26,7 +26,12 @@ public class MonsterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Init();	
+        healthBar = gameObject.transform.Find("Life").gameObject;
+        actionTarget = gameObject.transform.Find("Action").gameObject;
+       // gameObject.SetActive(false);
+        healthBar.SetActive(false);
+        actionTarget.SetActive(false);
+        //Init();	
     }
     
     void Init() {
@@ -39,16 +44,17 @@ public class MonsterController : MonoBehaviour
 		monsterName = "Vaporeon";
 		health = maxHealth;
 		patternIndex = 0;//Random?
-        healthBar = gameObject.transform.Find("Life").gameObject;
-        actionTarget = gameObject.transform.Find("Action").gameObject;
+        
 
         //Update UI
         healthBar.GetComponent<Slider>().maxValue = maxHealth;
         healthBar.GetComponent<Slider>().value = health;
-        actionTarget.SetActive(false);
+
+        //gameObject.SetActive(true);
+        healthBar.SetActive(true);
 
         //Send finish signal
-        //CombatManager.InitFinish(this);
+        //CombatManager.StateFinish(this, CombatManager.State.Init);
     }
 
     void BeginTurn() {
@@ -67,7 +73,7 @@ public class MonsterController : MonoBehaviour
         }
 		patternIndex = (patternIndex + 1) % Pattern.Length;
         actionTarget.SetActive(true);
-		//CombatManager.BeginTurnFinish(this);
+		//CombatManager.StateFinish(this, CombatManager.State.BeginTurn);
 	}
 
     void TakeDamage(int damage) {
@@ -78,7 +84,10 @@ public class MonsterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetKeyDown("a")) {
+        if(Input.GetKeyDown("z")) {
+            Init();
+          }
+          if (Input.GetKeyDown("a")) {
 			BeginTurn();
 		}
         if (Input.GetKeyDown("b"))
@@ -92,7 +101,7 @@ public class MonsterController : MonoBehaviour
         if (Input.GetKeyDown("d"))
         {
             EndCombat();
-        }*/
+        }
     }
 
     void EndCombat()
