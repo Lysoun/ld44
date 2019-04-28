@@ -17,8 +17,8 @@ public class MonsterController : MonoBehaviour
 	private string monsterName;
 	private int health;
 	private int patternIndex;
-    private GameObject healthBar;
-    private GameObject actionTarget;
+    public GameObject healthBar;
+    public GameObject actionTarget;
     private Action currentTarget;
 
     /// <summary>
@@ -32,11 +32,11 @@ public class MonsterController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        healthBar = gameObject.transform.Find("Life").gameObject;
-        actionTarget = gameObject.transform.Find("Action").gameObject;
-        gameObject.GetComponent<SpriteRenderer>().enabled = false;
-        healthBar.SetActive(false);
-        actionTarget.SetActive(false);
+        //healthBar = gameObject.transform.Find("Life").gameObject;
+        //actionTarget = gameObject.transform.Find("Action").gameObject;
+        //gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        //healthBar.SetActive(false);
+        //actionTarget.SetActive(false);
         //Init();	
     }
 
@@ -45,12 +45,12 @@ public class MonsterController : MonoBehaviour
     /// </summary>
     public void Init(string attackOrder = "CP", int healthValue = 20, int speedValue = 10, int armorValue = 0, int attackValue = 5, string name = "RandoMonster", Sprite newSprite = null) {
 		//Stats
-		pattern = attackOrder;
-		maxHealth = healthValue;
-		speed = speedValue;
-		armor = armorValue;
-        attack = attackValue;
-		monsterName = name;
+		Pattern = "CP";
+		maxHealth = 20;
+		speed = 10;
+		armor = 0;
+        attack = 7;
+		monsterName = "RandoMonster";
 		health = maxHealth;
         patternIndex = Random.Range(0, monsterName.Length);
         
@@ -67,7 +67,7 @@ public class MonsterController : MonoBehaviour
         healthBar.SetActive(true);
 
         //Send finish signal
-        //combatManager.StateFinish(gameObject, Combat_State.Init);
+        combatManager.StateFinish(this.gameObject, Combat_State.Init);
     }
 
     /// <summary>
@@ -90,8 +90,8 @@ public class MonsterController : MonoBehaviour
         }
 		patternIndex = (patternIndex + 1) % pattern.Length;
         actionTarget.SetActive(true);
-        //combatManager.StateFinish(gameObject, Combat_State.Begin_Turn);
-    }
+		combatManager.StateFinish(this.gameObject, Combat_State.Begin_Turn);
+	}
 
     /// <summary>
     /// Update monster life variable and life bar
@@ -126,6 +126,14 @@ public class MonsterController : MonoBehaviour
     }
 
     /// <summary>
+    /// End of turn for monster
+    /// </summary>
+    public void EndTurn()
+    {
+        combatManager.StateFinish(this.gameObject, Combat_State.End_Turn);
+    }
+
+    /// <summary>
     /// Clean the Monster after battle
     /// </summary>
     public void EndCombat()
@@ -137,10 +145,10 @@ public class MonsterController : MonoBehaviour
     /// Get the Attack type/target, and hide the visible symbol
     /// </summary>
     /// <returns>The ID of the attack</returns>
-    int TypeAttack()
+    public Action TypeAttack()
     {
         actionTarget.SetActive(false);
-        return (int)currentTarget;
+        return currentTarget;
     }
 
     public int Health
