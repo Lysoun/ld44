@@ -63,7 +63,7 @@ public class MonsterController : MonoBehaviour
         healthBar.GetComponent<Slider>().maxValue = maxHealth;
         healthBar.GetComponent<Slider>().value = health;
 
-        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        gameObject.GetComponentInChildren<SpriteRenderer>().enabled = true;
         healthBar.SetActive(true);
 
         //Send finish signal
