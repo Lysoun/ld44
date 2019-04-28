@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Card_Class { Tank, Healer, Wizard, Ranger };
+
 [CreateAssetMenu(fileName = "NewCard", menuName = "Card")]
 public class CardData : ScriptableObject
 {
-    public string type;
+    
+    public Card_Class type;
 
-    public int healthMin;
+    public int healthMin = 1;
     public int healthMax;
     public int atkMin;
     public int atkMax;
@@ -15,12 +18,12 @@ public class CardData : ScriptableObject
     public int armorMax;
     public int speedMin;
     public int speedMax;
-    public int ageMin;
-    public int ageMax;
+    private int ageMin = 1;
+    private int ageMax = 3;
 
     public int cost;
 
-    public int xpMax;
+    public int xpMax = 1;
     private int xp = 0;
 
     
@@ -31,5 +34,15 @@ public class CardData : ScriptableObject
     public int getXp()
     {
         return xp;
+    }
+
+    public int getAgeMin()
+    {
+        return ageMin;
+    }
+
+    public int getAgeMax()
+    {
+        return ageMax;
     }
 }
