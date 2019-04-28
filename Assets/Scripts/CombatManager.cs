@@ -21,6 +21,7 @@ public class CombatManager : MonoBehaviour
     public MonsterController monster;
     public PlayerController player;
     public ActiveCard activeCard;
+    public PreviewCardDisplay preview_Display;
 
     public Combat_State current_state;
 
@@ -39,14 +40,13 @@ public class CombatManager : MonoBehaviour
     private bool player_endTurnReady;
     private bool activeCard_endTurnReady;
 
-    private bool combat_finished;
+    private bool resolution_finished;
 
 
     // Start is called before the first frame update
     void Start()
     {
         ChangeState(Combat_State.Init);
-
     }
 
     // Update is called once per frame
@@ -77,6 +77,42 @@ public class CombatManager : MonoBehaviour
                     break;
                 case Combat_State.End_Turn:
                     activeCard_endTurnReady = true;
+                    break;
+            }
+            return;
+        }
+
+        PlayerController temp_player = go.GetComponent<PlayerController>();
+        if (temp_player != null)
+        {
+            switch (finished_state)
+            {
+                case Combat_State.Init:
+                    player_initialized = true;
+                    break;
+                case Combat_State.Begin_Turn:
+                    player_beginTurnReady = true;
+                    break;
+                case Combat_State.End_Turn:
+                    player_endTurnReady = true;
+                    break;
+            }
+            return;
+        }
+
+        MonsterController temp_monster = go.GetComponent<MonsterController>();
+        if (temp_monster != null)
+        {
+            switch (finished_state)
+            {
+                case Combat_State.Init:
+                    monster_initialized = true;
+                    break;
+                case Combat_State.Begin_Turn:
+                    monster_beginTurnReady = true;
+                    break;
+                case Combat_State.End_Turn:
+                    monster_endTurnReady = true;
                     break;
             }
             return;
@@ -144,6 +180,8 @@ public class CombatManager : MonoBehaviour
         player_beginTurnReady = false;
         activeCard_beginTurnReady = false;
 
+        preview_Display.Hide();
+
         monster.Init();
         player.Init();
         activeCard.Init();
@@ -158,22 +196,28 @@ public class CombatManager : MonoBehaviour
         monster.BeginTurn();
         player.BeginTurn();
         activeCard.BeginTurn();
+
+        resolution_finished = false;
     }
 
     private void Player_Choose()
     {
+        preview_Display.Hide();
         selectedCard = null;
         player.Play();
     }
 
     private void Card_Preview()
     {
+        preview_Display.Display();
         // Start preview of selected card
         // Activation of the button pay what is left to pay.
     }
 
     private void Paying()
     {
+        preview_Display.Hide();
+        activeCard.NewCard(selectedCard.GetComponent<Card>());
         player.Sacrifice();
         // Display buttons.
         // Display cost text etc.
@@ -181,8 +225,56 @@ public class CombatManager : MonoBehaviour
 
     private void Turn_Resolution()
     {
-        // check first to hit.
-        // Then hit each others
+        int speed_card = activeCard.card.getSpeedValue();
+        int speed_monster = monster.Speed;
+
+        if (speed_card > speed_monster)
+        {
+            // Player hits first
+            int damage = activeCard.card.getAttackValue() - monster.Armor;
+            monster.TakeDamage(damage);
+            Debug.Log("Attack first : card fait " + damage.ToString() + " dégats au monstre");
+            if (monster.Health > 0)
+            {
+                damage = monster.Attack - activeCard.card.getArmorValue();
+                if (monster.TypeAttack() == MonsterController.Action.C)
+                {
+                    Debug.Log("Attack second : monstre fait " + damage.ToString() + " dégats à la carte");
+                    activeCard.TakeDamage(damage);
+                }
+                else
+                {
+                    Debug.Log("Attack second : monstre fait " + damage.ToString() + " dégats au joueur");
+                    player.TakeDamage(damage);
+                }
+                
+            }
+        }
+        else
+        {
+            // Monster hits first
+            int damage = monster.Attack - activeCard.card.getArmorValue();
+            Debug.Log(damage);
+            if (monster.TypeAttack() == MonsterController.Action.C)
+            {
+                Debug.Log("Attack first : monstre fait " + damage.ToString() + " dégats à la carte");
+                activeCard.TakeDamage(damage);
+            }
+            else
+            {
+                Debug.Log("Attack first : monstre fait " + damage.ToString() + " dégats au joueur");
+                player.TakeDamage(damage);
+            }
+
+            if (activeCard.card.getHealthValue() > 0)
+            {
+                damage = activeCard.card.getAttackValue() - monster.Armor;
+                Debug.Log("Attack second : card fait " + damage.ToString() + " dégats au monstre");
+                monster.TakeDamage(damage);
+            }
+        }
+
+        resolution_finished = true;
     }
 
     private void End_Turn()
@@ -235,23 +327,21 @@ public class CombatManager : MonoBehaviour
                 }
                 break;
 
-            //case Combat_State.Card_Preview: 
-                // break;
+            case Combat_State.Card_Preview: 
+                break;
                 // No need because of the functions Valid() and Cancel() which do the change
                 
             // SacrificeCard() redo the change to paying.
             // The button call the function PayWithLife() does the change too.
             case Combat_State.Paying:
-                if (activeCard.RemainingCost() < 0)
+                if (activeCard.RemainingCost() <= 0)
                 {
                     ChangeState(Combat_State.Turn_Resolution);
                 }
                 break;
 
             case Combat_State.Turn_Resolution:
-                if (activeCard_endTurnReady &&
-                    monster_endTurnReady &&
-                    player_endTurnReady)
+                if (resolution_finished)
                 {
                     ChangeState(Combat_State.End_Turn);
                 }
@@ -262,7 +352,7 @@ public class CombatManager : MonoBehaviour
                     monster_endTurnReady &&
                     player_endTurnReady)
                 {
-                    if (player.health < 0 || monster.health < 0)
+                    if (player.GetLifePoints() <= 0 || monster.Health <= 0) // Ajouter pour le joueur aussi !
                     {
                         ChangeState(Combat_State.End_Combat);
                     }
@@ -285,7 +375,8 @@ public class CombatManager : MonoBehaviour
     private void ChangeState(Combat_State new_state)
     {
         current_state = new_state;
-
+        // Debug.Log(current_state);
+        Debug.Log(Time.time + "/// New state : " + current_state);
         switch (current_state)
         {
             case Combat_State.Init:
@@ -348,6 +439,7 @@ public class CombatManager : MonoBehaviour
     {
         if (current_state == Combat_State.Paying)
         {
+
             ChangeState(Combat_State.Turn_Resolution);
         }
         else

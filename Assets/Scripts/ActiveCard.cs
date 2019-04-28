@@ -8,9 +8,34 @@ public class ActiveCard : MonoBehaviour
     public PlayerController player;
      
 
-    private Card card;
+    public Card card;
     private int health;
     private int cost;
+    public ActiveCardDisplay display;
+
+    public GameObject button;
+
+    void Start()
+    {
+        display = GetComponent<ActiveCardDisplay>();
+    }
+
+    void Update()
+    {
+        UpdatePayButtonVisibility();
+    }
+
+    private void UpdatePayButtonVisibility()
+    {
+        if (cost > 0)
+        {
+            button.SetActive(true);
+        }
+        else
+        {
+            button.SetActive(false);
+        }
+    }
 
     #region PUBLIC FUNCTIONS
 
@@ -31,7 +56,7 @@ public class ActiveCard : MonoBehaviour
     public void Init()
     {
         card = null;
-
+        display.Hide();
         combatManager.StateFinish(this.gameObject, Combat_State.Init);
     }
 
@@ -57,8 +82,12 @@ public class ActiveCard : MonoBehaviour
             DiscardCard();
         }
         card = new_card;
-        health = card.healthValue;
-        cost = card.costValue;
+        GameObject card_object = card.gameObject;
+        card_object.transform.SetParent(display.canvas.transform);
+        card_object.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        display.Display();
+        cost = card.getCostValue();
+        health = card.getHealthValue();
     }
 
     /// <summary>
@@ -75,8 +104,9 @@ public class ActiveCard : MonoBehaviour
     /// </summary>
     public void DiscardCard()
     {
-        player.AddToDiscard(card);
+        player.DiscardCard(card);
         card = null;
+        display.Hide();
     }
 
     /// <summary>
@@ -86,6 +116,7 @@ public class ActiveCard : MonoBehaviour
     {
         Destroy(card.gameObject);
         card = null;
+        display.Hide();
     }
 
     /// <summary>
@@ -113,7 +144,7 @@ public class ActiveCard : MonoBehaviour
     public void EndTurn()
     {
         // XP the card
-        card.AddXP(1);
+        // card.AddXP(1);
 
         combatManager.StateFinish(this.gameObject, Combat_State.End_Turn);
     }
