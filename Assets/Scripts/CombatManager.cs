@@ -351,6 +351,7 @@ public class CombatManager : MonoBehaviour
             case Combat_State.Paying:
                 if (activeCard.RemainingCost() <= 0)
                 {
+                    player.EndSacrifice();
                     ChangeState(Combat_State.Turn_Resolution);
                 }
                 break;
@@ -444,6 +445,7 @@ public class CombatManager : MonoBehaviour
     {
         if (current_state == Combat_State.Paying)
         {
+            player.EndSacrifice();
             int remaining_cost = activeCard.RemainingCost();
             player.TakeDamage(remaining_cost);
             activeCard.Pay(remaining_cost);
