@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b9b492fbce58e84ea4f619ab09ded32, type: 3}
   m_Name: Mage
   m_EditorClassIdentifier: 
-  type: Mage
+  type: Wizard
   healthMin: 1
   healthMax: 2
   atkMin: 1
@@ -21,5 +21,7 @@ MonoBehaviour:
   armorMax: 2
   speedMin: 1
   speedMax: 2
+  ageMin: 0
+  ageMax: 0
   cost: 1
-  artwork: {fileID: 0}
+  xpMax: 0

@@ -1466,7 +1466,7 @@ MonoBehaviour:
     spaceCount: 1
     wordCount: 2
     linkCount: 0
-    lineCount: 2
+    lineCount: 3
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -2470,6 +2470,7 @@ MonoBehaviour:
   canvas: {fileID: 457640151}
   preview_canvas: {fileID: 279542820}
   card_to_preview: {fileID: 0}
+  original_card: {fileID: 0}
   manager: {fileID: 902598164}
 --- !u!4 &1349074175
 Transform:
@@ -2693,9 +2694,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Card_Prefab_At_Beginning:
-  - {fileID: 4954937847747901231, guid: bfb5665d7882914458e106ac9df73c0b, type: 3}
-  - {fileID: 8218295123833228872, guid: 78d514632488dd14686661058e4af01b, type: 3}
-  multiplicity: 0c00000012000000
+  - {fileID: 8595813447316864633, guid: 232237c92c3e00f42953f51eacfbb38e, type: 3}
+  multiplicity: 08000000
   canvas_hand: {fileID: 424430582}
   card_container: {fileID: 1121427868}
   combatManager: {fileID: 902598164}
@@ -3432,7 +3432,7 @@ MonoBehaviour:
     spaceCount: 1
     wordCount: 2
     linkCount: 0
-    lineCount: 2
+    lineCount: 3
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
