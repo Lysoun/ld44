@@ -20,8 +20,6 @@ public class CardData : ScriptableObject
 
     public int cost;
 
-    public Texture artwork;
-
     public int xpMax;
     private int xp = 0;
 
