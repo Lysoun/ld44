@@ -10,7 +10,7 @@ public class CardData : ScriptableObject
     
     public Card_Class type;
 
-    public int healthMin;
+    public int healthMin = 1;
     public int healthMax;
     public int atkMin;
     public int atkMax;
@@ -23,7 +23,7 @@ public class CardData : ScriptableObject
 
     public int cost;
 
-    public int xpMax;
+    public int xpMax = 1;
     private int xp = 0;
 
     
