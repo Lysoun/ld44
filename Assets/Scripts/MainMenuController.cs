@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -12,6 +13,11 @@ public class MainMenuController : MonoBehaviour
     {
         mainMenu = gameObject.transform.Find("MainMenu").gameObject;
         creditMenu = gameObject.transform.Find("CreditMenu").gameObject;
+    }
+
+    public void Play()
+    {
+        SceneManager.LoadScene("CombatScene", LoadSceneMode.Single);
     }
 
     /// <summary>
