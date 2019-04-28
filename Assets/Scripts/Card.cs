@@ -54,6 +54,16 @@ public class Card : MonoBehaviour
     /// </summary>
     public RawImage artwork;
 
+    /// <summary>
+    /// Image reference for hourglass emptying part
+    /// </summary>
+    public Image time_up;
+
+    /// <summary>
+    /// Image reference for hourglass filling part
+    /// </summary>
+    public Image time_down;
+
     public GameObject graphicsChildren;
     ///////////////////////////////////////////////////////////////////
     /// Values of the different stats.
@@ -262,6 +272,9 @@ public class Card : MonoBehaviour
         armorText.SetText(armorValue.ToString());
         speedText.SetText(speedValue.ToString());
         healthText.SetText(healthValue.ToString());
+        time_down.fillAmount = (Time.time%5)/5;
+        time_up.fillAmount = 1 - (Time.time % 5) / 5;
+
     }
 
     public void Hide()
