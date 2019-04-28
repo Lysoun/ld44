@@ -70,7 +70,10 @@ public class PlayerController : MonoBehaviour
     public void BeginTurn()
     {
         Card drawn_card = deck.Draw();
-        hand.Add(drawn_card);
+        if (drawn_card != null)
+        {
+            hand.Add(drawn_card);
+        }
         combatManager.StateFinish(this.gameObject, Combat_State.Begin_Turn);
     }
 

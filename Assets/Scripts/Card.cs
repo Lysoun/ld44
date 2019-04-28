@@ -153,13 +153,13 @@ public class Card : MonoBehaviour
     // Initialize the content of the card prefab.
     void Start()
     {
-        System.Random rnd = new System.Random();
         typeValue = card.type;
-        healthValue = rnd.Next(card.healthMin, card.healthMax + 1);
-        atkValue = rnd.Next(card.atkMin, card.atkMax + 1);
-        armorValue = rnd.Next(card.armorMin, card.armorMax + 1);
-        speedValue = rnd.Next(card.speedMin, card.speedMax + 1);
-        ageValue = rnd.Next(card.ageMin, card.ageMax + 1);
+        healthValue = Random.Range(card.healthMin, card.healthMax + 1);
+        atkValue = Random.Range(card.atkMin, card.atkMax + 1);
+        armorValue = Random.Range(card.armorMin, card.armorMax + 1);
+        speedValue = Random.Range(card.speedMin, card.speedMax + 1);
+        Debug.Log("Age : Min = " + card.ageMin.ToString() + " / Max = " + card.ageMax.ToString());
+        ageValue = Random.Range(card.ageMin, card.ageMax + 1);
         costValue = card.cost;
         
         xpToUpValue = card.xpMax;
@@ -277,7 +277,7 @@ public class Card : MonoBehaviour
     public void RandomizeValues()
     {
         typeValue = card.type;
-  
+        Debug.Log("Min = " + card.healthMin.ToString() + " / Max = " + card.healthMax.ToString());
         healthValue = Random.Range(card.healthMin, card.healthMax + 1);
         atkValue = Random.Range(card.atkMin, card.atkMax + 1);
         armorValue = Random.Range(card.armorMin, card.armorMax + 1);
@@ -295,6 +295,25 @@ public class Card : MonoBehaviour
         costText.SetText(costValue.ToString());
 
         //artwork.texture = artworkImage;
+    }
+
+    public void Copy_Values(Card other_card)
+    {
+        this.healthValue = other_card.healthValue;
+        this.atkValue = other_card.atkValue;
+        this.armorValue = other_card.armorValue;
+        this.speedValue = other_card.speedValue;
+        this.costValue = other_card.costValue;
+        this.typeValue = other_card.typeValue;
+
+        typeText.SetText(typeValue);
+
+        healthText.SetText(healthValue.ToString());
+        atkText.SetText(atkValue.ToString());
+        armorText.SetText(armorValue.ToString());
+        speedText.SetText(speedValue.ToString());
+
+        costText.SetText(costValue.ToString());
     }
 
     ///////////////////////////////////////////////////////////////////

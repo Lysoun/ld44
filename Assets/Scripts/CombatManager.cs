@@ -215,6 +215,7 @@ public class CombatManager : MonoBehaviour
     private void Card_Preview()
     {
         preview_Display.card_to_preview = Instantiate(selectedCard).GetComponent<Card>();
+        preview_Display.original_card = selectedCard.GetComponent<Card>();
         preview_Display.Display();
         // Start preview of selected card
         // Activation of the button pay what is left to pay.
@@ -285,15 +286,31 @@ public class CombatManager : MonoBehaviour
 
     private void End_Turn()
     {
+        if (activeCard.card.getHealthValue() > 0)
+        {
+            endTurn_Buttons.SetActive(true);
+        }
+        else
+        {
+            endTurn_Buttons.SetActive(false);
+            endTurnChoiceMade = true;
+        }
+
         activeCard.EndTurn();
         monster.EndTurn();
         player.EndTurn();
-
-        endTurn_Buttons.SetActive(true);
     }
 
     private void End_Combat()
     {
+        if (monster.Health > 0)
+        {
+            Debug.Log("You lose !");
+        }
+        else
+        {
+            Debug.Log("Yoou win !");
+        }
         activeCard.EndCombat();
         monster.EndCombat();
         player.EndCombat();

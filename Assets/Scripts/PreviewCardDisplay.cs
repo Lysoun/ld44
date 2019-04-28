@@ -9,12 +9,17 @@ public class PreviewCardDisplay : MonoBehaviour
 
     public Card card_to_preview;
 
+    public Card original_card;
+
     public CombatManager manager;
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (card_to_preview != null && original_card != null)
+        {
+            card_to_preview.Copy_Values(original_card);
+        }
     }
 
     public void Display()
