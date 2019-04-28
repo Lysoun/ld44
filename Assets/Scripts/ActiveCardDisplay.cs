@@ -37,7 +37,9 @@ public class ActiveCardDisplay : MonoBehaviour
 
     private void UpdateTexts()
     {
-        text.text = "an updated text";
+        text.text = "Invocation needs " + 
+            controller.RemainingCost().ToString() + 
+            "HP. Click here to pay with your life.";
         // using controller to have the card data;
     }
 }

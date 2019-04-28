@@ -24,7 +24,7 @@ public class CombatManager : MonoBehaviour
     public PreviewCardDisplay preview_Display;
 
     public Combat_State current_state;
-
+    public GameObject endTurn_Buttons;
 
     private GameObject selectedCard;
 
@@ -41,6 +41,7 @@ public class CombatManager : MonoBehaviour
     private bool activeCard_endTurnReady;
 
     private bool resolution_finished;
+    private bool endTurnChoiceMade;
 
 
     // Start is called before the first frame update
@@ -140,6 +141,7 @@ public class CombatManager : MonoBehaviour
             Debug.LogWarning("Bug here ! Wrong current state");
             return;
         }
+        player.PlayedCard(selectedCard.GetComponent<Card>());
         ChangeState(Combat_State.Paying);
     }
 
@@ -153,6 +155,7 @@ public class CombatManager : MonoBehaviour
             Debug.LogWarning("Bug here ! Wrong current state");
             return;
         }
+        selectedCard = null;
         ChangeState(Combat_State.Player_Choose);
     }
 
@@ -181,6 +184,7 @@ public class CombatManager : MonoBehaviour
         activeCard_beginTurnReady = false;
 
         preview_Display.Hide();
+        endTurn_Buttons.SetActive(false);
 
         monster.Init();
         player.Init();
@@ -198,6 +202,7 @@ public class CombatManager : MonoBehaviour
         activeCard.BeginTurn();
 
         resolution_finished = false;
+        endTurnChoiceMade = false;
     }
 
     private void Player_Choose()
@@ -209,6 +214,8 @@ public class CombatManager : MonoBehaviour
 
     private void Card_Preview()
     {
+        preview_Display.card_to_preview = Instantiate(selectedCard).GetComponent<Card>();
+        preview_Display.original_card = selectedCard.GetComponent<Card>();
         preview_Display.Display();
         // Start preview of selected card
         // Activation of the button pay what is left to pay.
@@ -279,6 +286,16 @@ public class CombatManager : MonoBehaviour
 
     private void End_Turn()
     {
+        if (activeCard.card.getHealthValue() > 0)
+        {
+            endTurn_Buttons.SetActive(true);
+        }
+        else
+        {
+            endTurn_Buttons.SetActive(false);
+            endTurnChoiceMade = true;
+        }
+
         activeCard.EndTurn();
         monster.EndTurn();
         player.EndTurn();
@@ -286,6 +303,14 @@ public class CombatManager : MonoBehaviour
 
     private void End_Combat()
     {
+        if (monster.Health > 0)
+        {
+            Debug.Log("You lose !");
+        }
+        else
+        {
+            Debug.Log("Yoou win !");
+        }
         activeCard.EndCombat();
         monster.EndCombat();
         player.EndCombat();
@@ -315,7 +340,14 @@ public class CombatManager : MonoBehaviour
                     monster_beginTurnReady &&
                     player_beginTurnReady)
                 {
-                    ChangeState(Combat_State.Player_Choose);
+                    if (activeCard.IsEmpty())
+                    {
+                        ChangeState(Combat_State.Player_Choose);
+                    }
+                    else
+                    {
+                        ChangeState(Combat_State.Turn_Resolution);
+                    }
                 }
                 break;
 
@@ -336,6 +368,7 @@ public class CombatManager : MonoBehaviour
             case Combat_State.Paying:
                 if (activeCard.RemainingCost() <= 0)
                 {
+                    player.EndSacrifice();
                     ChangeState(Combat_State.Turn_Resolution);
                 }
                 break;
@@ -350,7 +383,8 @@ public class CombatManager : MonoBehaviour
             case Combat_State.End_Turn:
                 if (activeCard_endTurnReady &&
                     monster_endTurnReady &&
-                    player_endTurnReady)
+                    player_endTurnReady &&
+                    endTurnChoiceMade)
                 {
                     if (player.GetLifePoints() <= 0 || monster.Health <= 0) // Ajouter pour le joueur aussi !
                     {
@@ -411,35 +445,27 @@ public class CombatManager : MonoBehaviour
 
     }
 
-    public void SubmitCard()
+    public void DiscardInvoc()
     {
-        if (current_state == Combat_State.Card_Preview)
-        {
-            ChangeState(Combat_State.Paying);
-        }
-        else
-        {
-            Debug.Log("Bug ! Should not be able to push that button !");
-        }
+        activeCard.DiscardCard();
+        endTurn_Buttons.SetActive(false);
+        endTurnChoiceMade = true;
     }
 
-    public void CancelCard()
+    public void KeepInvoc()
     {
-        if (current_state == Combat_State.Card_Preview)
-        {
-            ChangeState(Combat_State.Player_Choose);
-        }
-        else
-        {
-            Debug.Log("Bug ! Should not be able to push that button !");
-        }
+        endTurn_Buttons.SetActive(false);
+        endTurnChoiceMade = true;
     }
 
     public void PayWithHealth()
     {
         if (current_state == Combat_State.Paying)
         {
-
+            player.EndSacrifice();
+            int remaining_cost = activeCard.RemainingCost();
+            player.TakeDamage(remaining_cost);
+            activeCard.Pay(remaining_cost);
             ChangeState(Combat_State.Turn_Resolution);
         }
         else

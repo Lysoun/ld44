@@ -96,7 +96,7 @@ public class ActiveCard : MonoBehaviour
     /// <param name="value">The amount of damage taken by the card.</param>
     public void TakeDamage(int value)
     {
-        cost -= value;
+        card.SetHealthValue(card.getHealthValue() - value);
     }
 
     /// <summary>
@@ -145,6 +145,16 @@ public class ActiveCard : MonoBehaviour
     {
         // XP the card
         // card.AddXP(1);
+
+        if (card.getHealthValue() > 0)
+        {
+            card.AddXp(1);
+        }
+        else
+        {
+            DestroyCard();
+        }
+
 
         combatManager.StateFinish(this.gameObject, Combat_State.End_Turn);
     }

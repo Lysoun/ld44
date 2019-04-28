@@ -18,7 +18,7 @@ public class CardData : ScriptableObject
     public int armorMax;
     public int speedMin;
     public int speedMax;
-    private int ageMin = 2;
+    private int ageMin = 1;
     private int ageMax = 3;
 
     public int cost;
