@@ -5,10 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using System.Text;
 
+//public enum Card_Class { Tank, Healer, Wizard, Ranger };
+
 public class Card : MonoBehaviour
 {
-    enum Class { Tank, Healer, Wizard, Ranger };
-
     /// <summary>
     /// Card datas.
     /// </summary>
@@ -72,7 +72,7 @@ public class Card : MonoBehaviour
     /// <summary>
     /// Type of the card.
     /// </summary>
-    private string typeValue;
+    private Card_Class typeValue;
 
     /// <summary>
     /// Health of the card.
@@ -159,23 +159,26 @@ public class Card : MonoBehaviour
     private int rangerArmor2 = 1;
     private int rangerArmor3 = 0;
 
+    private bool block = false;
 
     // Initialize the content of the card prefab.
     void Start()
     {
         typeValue = card.type;
+        
+        ageValue = Random.Range(card.getAgeMin(), card.getAgeMax() + 1);
+
         healthValue = Random.Range(card.healthMin, card.healthMax + 1);
         atkValue = Random.Range(card.atkMin, card.atkMax + 1);
         armorValue = Random.Range(card.armorMin, card.armorMax + 1);
         speedValue = Random.Range(card.speedMin, card.speedMax + 1);
-        Debug.Log("Age : Min = " + card.ageMin.ToString() + " / Max = " + card.ageMax.ToString());
-        ageValue = Random.Range(card.ageMin, card.ageMax + 1);
+   
         costValue = card.cost;
         
         xpToUpValue = card.xpMax;
         xpValue = card.getXp();
 
-        typeText.SetText(typeValue);
+        typeText.SetText(Card_ClassToString(typeValue));
 
         healthText.SetText(healthValue.ToString());
         atkText.SetText(atkValue.ToString());
@@ -185,10 +188,9 @@ public class Card : MonoBehaviour
 
         costText.SetText(costValue.ToString());
         
-        Class cardClass = (Class)System.Enum.Parse(typeof(Class), typeValue);
-        switch (cardClass)
+        switch (typeValue)
         {
-            case Class.Tank:
+            case Card_Class.Tank:
                 switch (ageValue)
                 {
                     case 1:
@@ -205,7 +207,7 @@ public class Card : MonoBehaviour
                         break;
                 }
                 break;
-            case Class.Healer:
+            case Card_Class.Healer:
                 switch (ageValue)
                 {
                     case 1:
@@ -222,7 +224,7 @@ public class Card : MonoBehaviour
                         break;
                 }
                 break;
-            case Class.Wizard:
+            case Card_Class.Wizard:
                 switch (ageValue)
                 {
                     case 1:
@@ -239,7 +241,7 @@ public class Card : MonoBehaviour
                         break;
                 }
                 break;
-            case Class.Ranger:
+            case Card_Class.Ranger:
                 switch (ageValue)
                 {
                     case 1:
@@ -268,8 +270,41 @@ public class Card : MonoBehaviour
     //Update the texts of the card
     public void Update()
     {
+        if (healthValue <= 0)
+        {
+            healthValue = 0;
+            atkValue = 0;
+            armorValue = 0;
+            speedValue = 0;
+            artworkImage = Resources.Load("Characters/Cadaver") as Texture;
+            artwork.texture = artworkImage;
+        }
+
+        if (atkValue < 0)
+        {
+            atkValue = 0;
+        }
+
+        if ((armorValue < 0) && (!block))
+        {
+            armorValue = 0;
+        }
+
+        if (speedValue < 0)
+        {
+            speedValue = 0;
+        }
+
         atkText.SetText(atkValue.ToString());
-        armorText.SetText(armorValue.ToString());
+        if (!block)
+        {
+            armorText.SetText(armorValue.ToString());
+        }
+        else
+        {
+            armorText.SetText("∞");
+        }
+        
         speedText.SetText(speedValue.ToString());
         healthText.SetText(healthValue.ToString());
         time_down.fillAmount = (Time.time%5)/5;
@@ -298,7 +333,7 @@ public class Card : MonoBehaviour
         costValue = card.cost;
         //artworkImage = card.artwork;  card.artwork n'existe plus.
 
-        typeText.SetText(typeValue);
+        typeText.SetText(Card_ClassToString(typeValue));
 
         healthText.SetText(healthValue.ToString());
         atkText.SetText(atkValue.ToString());
@@ -319,7 +354,7 @@ public class Card : MonoBehaviour
         this.costValue = other_card.costValue;
         this.typeValue = other_card.typeValue;
 
-        typeText.SetText(typeValue);
+        typeText.SetText(Card_ClassToString(typeValue));
 
         healthText.SetText(healthValue.ToString());
         atkText.SetText(atkValue.ToString());
@@ -337,7 +372,7 @@ public class Card : MonoBehaviour
     /// Return the type value of the card.
     /// </summary>
     /// <returns></returns>
-    public string getTypeValue()
+    public Card_Class getTypeValue()
     {
         return typeValue;
     }
@@ -412,6 +447,16 @@ public class Card : MonoBehaviour
     public int getXpValue()
     {
         return xpValue;
+    }
+
+    /// <summary>
+    /// True if its a cadaver that can block.
+    /// Else false.
+    /// </summary>
+    /// <returns></returns>
+    public bool canBlock()
+    {
+        return block;
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -493,10 +538,9 @@ public class Card : MonoBehaviour
     {
        if (ageValue < 4)
        {
-            Class cardClass = (Class)System.Enum.Parse(typeof(Class), typeValue);
-            switch (cardClass)
+            switch (typeValue)
             {
-                case Class.Tank:
+                case Card_Class.Tank:
                     if (ageValue == 2)
                     {
                         healthValue += tankHealth2;
@@ -514,7 +558,7 @@ public class Card : MonoBehaviour
                         artworkImage = Resources.Load("Characters/WarriorOld") as Texture;
                     }
                     break;
-                case Class.Healer:
+                case Card_Class.Healer:
                     if (ageValue == 2)
                     {
                         healthValue += healerHealth2;
@@ -532,7 +576,7 @@ public class Card : MonoBehaviour
                         artworkImage = Resources.Load("Characters/HealerOld") as Texture;
                     }
                     break;
-                case Class.Wizard:
+                case Card_Class.Wizard:
                     if (ageValue == 2)
                     {
                         healthValue += mageHealth2;
@@ -550,7 +594,7 @@ public class Card : MonoBehaviour
                         artworkImage = Resources.Load("Characters/WizardOld") as Texture;
                     }
                     break;
-                case Class.Ranger:
+                case Card_Class.Ranger:
                     if (ageValue == 2)
                     {
                         healthValue += rangerHealth2;
@@ -572,18 +616,62 @@ public class Card : MonoBehaviour
                     Debug.Log("T'es mauvais Jack !!!");
                     break;
             }
-       }
+
+            if (healthValue <= 0)
+            {
+                healthValue = 1;
+            }
+
+            if (atkValue <= 0)
+            {
+                atkValue = 0;
+            }
+
+            if (armorValue <= 0)
+            {
+                armorValue = 0;
+            }
+
+            if (speedValue <= 0)
+            {
+                speedValue = 0;
+            }
+        }
        else
        {
-            healthValue = 0;
+            healthValue = 1;
             atkValue = 0;
             armorValue = 0;
             speedValue = 0;
             costValue = 0;
+            costText.SetText(costValue.ToString());
+            block = true;
             artworkImage = Resources.Load("Characters/Cadaver") as Texture;
         }
 
         artwork.texture = artworkImage;
     }
 
+    /// <summary>
+    /// Convert the enum Card_Class into its string form.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public string Card_ClassToString(Card_Class type)
+    {
+        switch (type)
+        {
+            case Card_Class.Tank:
+                return "Tank";
+            case Card_Class.Healer:
+                return "Healer";
+            case Card_Class.Wizard:
+                return "Wizard";
+            case Card_Class.Ranger:
+                return "Ranger";
+            default:
+                Debug.Log("T'es mauvais Jack !!!");
+                return "Ah";
+        }
+    }
 }
