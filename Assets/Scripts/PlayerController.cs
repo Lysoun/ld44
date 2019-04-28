@@ -151,6 +151,12 @@ public class PlayerController : MonoBehaviour
         //Destroy(card.gameObject);
     }
 
+    public void EndSacrifice()
+    {
+        picker.enabled = false;
+        isSacrificing = false;
+    }
+
     // Mofify player's life points by the lp value, which can be negative or positive
     public void TakeDamage(int lp)
     {
@@ -165,10 +171,11 @@ public class PlayerController : MonoBehaviour
 
     public void PickedCard(GameObject card)
     {
-        picker.enabled = false;
+        
 
         if (isPlaying)
         {
+            picker.enabled = false;
             isPlaying = false;
             combatManager.Choosen_Card(card.GetComponent<Card>());
             // hand.Remove(card.GetComponent<Card>());
@@ -176,15 +183,16 @@ public class PlayerController : MonoBehaviour
         }
         else if (isSacrificing)
         {
-            isSacrificing = false;
+            // isSacrificing = true;
             combatManager.Sacrificed_Card(card.GetComponent<Card>().getCostValue());
             hand.Remove(card.GetComponent<Card>());
             Destroy(card);
             // deck.destroy(card);
-            combatManager.StateFinish(this.gameObject, Combat_State.Sacrifising);
+            // combatManager.StateFinish(this.gameObject, Combat_State.Sacrifising);
         }
         else
         {
+            picker.enabled = false;
             Debug.Log("WTF ?!");
         }
         
