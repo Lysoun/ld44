@@ -21,7 +21,7 @@ public class CardData : ScriptableObject
     private int ageMin = 1;
     private int ageMax = 3;
 
-    public int cost;
+    private int cost = 0;
 
     public int xpMax = 1;
     private int xp = 0;
@@ -44,5 +44,10 @@ public class CardData : ScriptableObject
     public int getAgeMax()
     {
         return ageMax;
+    }
+
+    public int getCost()
+    {
+        return cost;
     }
 }
