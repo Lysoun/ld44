@@ -140,6 +140,7 @@ public class CombatManager : MonoBehaviour
             Debug.LogWarning("Bug here ! Wrong current state");
             return;
         }
+        player.PlayedCard(selectedCard.GetComponent<Card>());
         ChangeState(Combat_State.Paying);
     }
 
@@ -153,6 +154,7 @@ public class CombatManager : MonoBehaviour
             Debug.LogWarning("Bug here ! Wrong current state");
             return;
         }
+        selectedCard = null;
         ChangeState(Combat_State.Player_Choose);
     }
 
@@ -209,6 +211,7 @@ public class CombatManager : MonoBehaviour
 
     private void Card_Preview()
     {
+        preview_Display.card_to_preview = Instantiate(selectedCard).GetComponent<Card>();
         preview_Display.Display();
         // Start preview of selected card
         // Activation of the button pay what is left to pay.
@@ -411,35 +414,13 @@ public class CombatManager : MonoBehaviour
 
     }
 
-    public void SubmitCard()
-    {
-        if (current_state == Combat_State.Card_Preview)
-        {
-            ChangeState(Combat_State.Paying);
-        }
-        else
-        {
-            Debug.Log("Bug ! Should not be able to push that button !");
-        }
-    }
-
-    public void CancelCard()
-    {
-        if (current_state == Combat_State.Card_Preview)
-        {
-            ChangeState(Combat_State.Player_Choose);
-        }
-        else
-        {
-            Debug.Log("Bug ! Should not be able to push that button !");
-        }
-    }
-
     public void PayWithHealth()
     {
         if (current_state == Combat_State.Paying)
         {
-
+            int remaining_cost = activeCard.RemainingCost();
+            player.TakeDamage(remaining_cost);
+            activeCard.Pay(remaining_cost);
             ChangeState(Combat_State.Turn_Resolution);
         }
         else
