@@ -24,7 +24,7 @@ public class CombatManager : MonoBehaviour
     public PreviewCardDisplay preview_Display;
 
     public Combat_State current_state;
-
+    public GameObject endTurn_Buttons;
 
     private GameObject selectedCard;
 
@@ -41,6 +41,7 @@ public class CombatManager : MonoBehaviour
     private bool activeCard_endTurnReady;
 
     private bool resolution_finished;
+    private bool endTurnChoiceMade;
 
 
     // Start is called before the first frame update
@@ -183,6 +184,7 @@ public class CombatManager : MonoBehaviour
         activeCard_beginTurnReady = false;
 
         preview_Display.Hide();
+        endTurn_Buttons.SetActive(false);
 
         monster.Init();
         player.Init();
@@ -200,6 +202,7 @@ public class CombatManager : MonoBehaviour
         activeCard.BeginTurn();
 
         resolution_finished = false;
+        endTurnChoiceMade = false;
     }
 
     private void Player_Choose()
@@ -285,6 +288,8 @@ public class CombatManager : MonoBehaviour
         activeCard.EndTurn();
         monster.EndTurn();
         player.EndTurn();
+
+        endTurn_Buttons.SetActive(true);
     }
 
     private void End_Combat()
@@ -318,7 +323,14 @@ public class CombatManager : MonoBehaviour
                     monster_beginTurnReady &&
                     player_beginTurnReady)
                 {
-                    ChangeState(Combat_State.Player_Choose);
+                    if (activeCard.IsEmpty())
+                    {
+                        ChangeState(Combat_State.Player_Choose);
+                    }
+                    else
+                    {
+                        ChangeState(Combat_State.Turn_Resolution);
+                    }
                 }
                 break;
 
@@ -353,7 +365,8 @@ public class CombatManager : MonoBehaviour
             case Combat_State.End_Turn:
                 if (activeCard_endTurnReady &&
                     monster_endTurnReady &&
-                    player_endTurnReady)
+                    player_endTurnReady &&
+                    endTurnChoiceMade)
                 {
                     if (player.GetLifePoints() <= 0 || monster.Health <= 0) // Ajouter pour le joueur aussi !
                     {
@@ -412,6 +425,19 @@ public class CombatManager : MonoBehaviour
                 break;
         }
 
+    }
+
+    public void DiscardInvoc()
+    {
+        activeCard.DiscardCard();
+        endTurn_Buttons.SetActive(false);
+        endTurnChoiceMade = true;
+    }
+
+    public void KeepInvoc()
+    {
+        endTurn_Buttons.SetActive(false);
+        endTurnChoiceMade = true;
     }
 
     public void PayWithHealth()
