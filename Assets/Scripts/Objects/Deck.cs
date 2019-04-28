@@ -42,16 +42,23 @@ public class Deck
             {
                 // TODO you lose because you have no cards
                 Debug.Log("Plus de carte, pouet");
+                return null;
             }
             else
             {
-                cards = discardPile;
+                int n = discardPile.Count;
+                for (int i = 0; i < n; i++)
+                {
+                    cards.Add(discardPile[0]);
+                    discardPile.RemoveAt(0);
+                }
                 discardPile.Clear();
             }
         }
 
-        System.Random rand = new System.Random();
-        int index = Random.Range(0, cards.Count);
+        
+        int index = Random.Range((int)0, cards.Count);
+        Debug.Log("Index = " + index.ToString());
         Card drawnCard = cards[index];
         drawnCard.Display();
         cards.Remove(drawnCard);

@@ -54,6 +54,16 @@ public class Card : MonoBehaviour
     /// </summary>
     public RawImage artwork;
 
+    /// <summary>
+    /// Image reference for hourglass emptying part
+    /// </summary>
+    public Image time_up;
+
+    /// <summary>
+    /// Image reference for hourglass filling part
+    /// </summary>
+    public Image time_down;
+
     public GameObject graphicsChildren;
     ///////////////////////////////////////////////////////////////////
     /// Values of the different stats.
@@ -154,15 +164,15 @@ public class Card : MonoBehaviour
     // Initialize the content of the card prefab.
     void Start()
     {
-        System.Random rnd = new System.Random();
         typeValue = card.type;
-        healthValue = rnd.Next(card.healthMin, card.healthMax + 1);
-        atkValue = rnd.Next(card.atkMin, card.atkMax + 1);
-        armorValue = rnd.Next(card.armorMin, card.armorMax + 1);
-        speedValue = rnd.Next(card.speedMin, card.speedMax + 1);
-        Debug.Log("AgeMin =" + card.getAgeMin());
-        Debug.Log("AgeMax =" + card.getAgeMax());
-        ageValue = rnd.Next(card.getAgeMin(), card.getAgeMax() + 1);
+        
+        ageValue = Random.Range(card.getAgeMin(), card.getAgeMax() + 1);
+
+        healthValue = Random.Range(card.healthMin, card.healthMax + 1);
+        atkValue = Random.Range(card.atkMin, card.atkMax + 1);
+        armorValue = Random.Range(card.armorMin, card.armorMax + 1);
+        speedValue = Random.Range(card.speedMin, card.speedMax + 1);
+   
         costValue = card.cost;
         
         xpToUpValue = card.xpMax;
@@ -297,6 +307,9 @@ public class Card : MonoBehaviour
         
         speedText.SetText(speedValue.ToString());
         healthText.SetText(healthValue.ToString());
+        time_down.fillAmount = (Time.time%5)/5;
+        time_up.fillAmount = 1 - (Time.time % 5) / 5;
+
     }
 
     public void Hide()
@@ -312,7 +325,7 @@ public class Card : MonoBehaviour
     public void RandomizeValues()
     {
         typeValue = card.type;
-  
+        Debug.Log("Min = " + card.healthMin.ToString() + " / Max = " + card.healthMax.ToString());
         healthValue = Random.Range(card.healthMin, card.healthMax + 1);
         atkValue = Random.Range(card.atkMin, card.atkMax + 1);
         armorValue = Random.Range(card.armorMin, card.armorMax + 1);
@@ -330,6 +343,25 @@ public class Card : MonoBehaviour
         costText.SetText(costValue.ToString());
 
         //artwork.texture = artworkImage;
+    }
+
+    public void Copy_Values(Card other_card)
+    {
+        this.healthValue = other_card.healthValue;
+        this.atkValue = other_card.atkValue;
+        this.armorValue = other_card.armorValue;
+        this.speedValue = other_card.speedValue;
+        this.costValue = other_card.costValue;
+        this.typeValue = other_card.typeValue;
+
+        typeText.SetText(Card_ClassToString(typeValue));
+
+        healthText.SetText(healthValue.ToString());
+        atkText.SetText(atkValue.ToString());
+        armorText.SetText(armorValue.ToString());
+        speedText.SetText(speedValue.ToString());
+
+        costText.SetText(costValue.ToString());
     }
 
     ///////////////////////////////////////////////////////////////////
