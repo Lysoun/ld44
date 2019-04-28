@@ -7,7 +7,7 @@ using System.Text;
 
 public class Card : MonoBehaviour
 {
-    enum Class { Tank, Healer, Mage, Ranger };
+    enum Class { Tank, Healer, Wizard, Ranger };
 
     /// <summary>
     /// Card datas.
@@ -161,7 +161,7 @@ public class Card : MonoBehaviour
         speedValue = rnd.Next(card.speedMin, card.speedMax + 1);
         ageValue = rnd.Next(card.ageMin, card.ageMax + 1);
         costValue = card.cost;
-        artworkImage = card.artwork;
+        
         xpToUpValue = card.xpMax;
         xpValue = card.getXp();
 
@@ -174,8 +174,94 @@ public class Card : MonoBehaviour
         SetAgeText(ageValue);
 
         costText.SetText(costValue.ToString());
-
+        
+        Class cardClass = (Class)System.Enum.Parse(typeof(Class), typeValue);
+        switch (cardClass)
+        {
+            case Class.Tank:
+                switch (ageValue)
+                {
+                    case 1:
+                        artworkImage = Resources.Load("Characters/WarriorYoung") as Texture;
+                        break;
+                    case 2:
+                        artworkImage = Resources.Load("Characters/WarriorAdult") as Texture;
+                        break;
+                    case 3:
+                        artworkImage = Resources.Load("Characters/WarriorOld") as Texture;
+                        break;
+                    default:
+                        Debug.Log("T'es mauvais Jack !!!");
+                        break;
+                }
+                break;
+            case Class.Healer:
+                switch (ageValue)
+                {
+                    case 1:
+                        artworkImage = Resources.Load("Characters/HealerYoung") as Texture;
+                        break;
+                    case 2:
+                        artworkImage = Resources.Load("Characters/HealerAdult") as Texture;
+                        break;
+                    case 3:
+                        artworkImage = Resources.Load("Characters/HealerOld") as Texture;
+                        break;
+                    default:
+                        Debug.Log("T'es mauvais Jack !!!");
+                        break;
+                }
+                break;
+            case Class.Wizard:
+                switch (ageValue)
+                {
+                    case 1:
+                        artworkImage = Resources.Load("Characters/WizardYoung") as Texture;
+                        break;
+                    case 2:
+                        artworkImage = Resources.Load("Characters/WizardAdult") as Texture;
+                        break;
+                    case 3:
+                        artworkImage = Resources.Load("Characters/WizardOld") as Texture;
+                        break;
+                    default:
+                        Debug.Log("T'es mauvais Jack !!!");
+                        break;
+                }
+                break;
+            case Class.Ranger:
+                switch (ageValue)
+                {
+                    case 1:
+                        artworkImage = Resources.Load("Characters/RangerYoung") as Texture;
+                        break;
+                    case 2:
+                        artworkImage = Resources.Load("Characters/RangerAdult") as Texture;
+                        break;
+                    case 3:
+                        artworkImage = Resources.Load("Characters/RangerOld") as Texture;
+                        break;
+                    default:
+                        Debug.Log("T'es mauvais Jack !!!");
+                        break;
+                }
+                break;
+            default:
+                Debug.Log("T'es mauvais Jack !!!");
+                break;
+        }
+        
         artwork.texture = artworkImage;
+    }
+
+
+    //Update the texts of the card
+    public void Update()
+    {
+        atkText.SetText(atkValue.ToString());
+        armorText.SetText(armorValue.ToString());
+        speedText.SetText(speedValue.ToString());
+        healthText.SetText(healthValue.ToString());
     }
 
     public void Hide()
@@ -197,7 +283,7 @@ public class Card : MonoBehaviour
         armorValue = Random.Range(card.armorMin, card.armorMax + 1);
         speedValue = Random.Range(card.speedMin, card.speedMax + 1);
         costValue = card.cost;
-        artworkImage = card.artwork;
+        //artworkImage = card.artwork;  card.artwork n'existe plus.
 
         typeText.SetText(typeValue);
 
@@ -208,7 +294,7 @@ public class Card : MonoBehaviour
 
         costText.SetText(costValue.ToString());
 
-        artwork.texture = artworkImage;
+        //artwork.texture = artworkImage;
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -352,6 +438,7 @@ public class Card : MonoBehaviour
             {
                 ageValue++;
                 SetAgeText(ageValue);
+                UpdateStats();
             }
 
             if (ageValue < 4)
@@ -363,7 +450,7 @@ public class Card : MonoBehaviour
                 xpValue = 0;
             }
 
-            UpdateStats();
+            
         }
     }
 
@@ -384,6 +471,7 @@ public class Card : MonoBehaviour
                         atkValue += tankAtk2;
                         armorValue += tankArmor2;
                         speedValue += tankSpeed2;
+                        artworkImage = Resources.Load("Characters/WarriorAdult") as Texture;
                     }
                     else
                     {
@@ -391,6 +479,7 @@ public class Card : MonoBehaviour
                         atkValue += tankAtk3;
                         armorValue += tankArmor3;
                         speedValue += tankSpeed3;
+                        artworkImage = Resources.Load("Characters/WarriorOld") as Texture;
                     }
                     break;
                 case Class.Healer:
@@ -400,6 +489,7 @@ public class Card : MonoBehaviour
                         atkValue += healerAtk2;
                         armorValue += healerArmor2;
                         speedValue += healerSpeed2;
+                        artworkImage = Resources.Load("Characters/HealerAdult") as Texture;
                     }
                     else
                     {
@@ -407,15 +497,17 @@ public class Card : MonoBehaviour
                         atkValue += healerAtk3;
                         armorValue += healerArmor3;
                         speedValue += healerSpeed3;
+                        artworkImage = Resources.Load("Characters/HealerOld") as Texture;
                     }
                     break;
-                case Class.Mage:
+                case Class.Wizard:
                     if (ageValue == 2)
                     {
                         healthValue += mageHealth2;
                         atkValue += mageAtk2;
                         armorValue += mageArmor2;
                         speedValue += mageSpeed2;
+                        artworkImage = Resources.Load("Characters/WizardAdult") as Texture;
                     }
                     else
                     {
@@ -423,15 +515,17 @@ public class Card : MonoBehaviour
                         atkValue += mageAtk3;
                         armorValue += mageArmor3;
                         speedValue += mageSpeed3;
+                        artworkImage = Resources.Load("Characters/WizardOld") as Texture;
                     }
                     break;
-                default:
+                case Class.Ranger:
                     if (ageValue == 2)
                     {
                         healthValue += rangerHealth2;
                         atkValue += rangerAtk2;
                         armorValue += rangerArmor2;
                         speedValue += rangerSpeed2;
+                        artworkImage = Resources.Load("Characters/RangerAdult") as Texture;
                     }
                     else
                     {
@@ -439,7 +533,11 @@ public class Card : MonoBehaviour
                         atkValue += rangerAtk3;
                         armorValue += rangerArmor3;
                         speedValue += rangerSpeed3;
+                        artworkImage = Resources.Load("Characters/RangerOld") as Texture;
                     }
+                    break;
+                default:
+                    Debug.Log("T'es mauvais Jack !!!");
                     break;
             }
        }
@@ -450,8 +548,10 @@ public class Card : MonoBehaviour
             armorValue = 0;
             speedValue = 0;
             costValue = 0;
-       }
+            artworkImage = Resources.Load("Characters/Cadaver") as Texture;
+        }
 
+        artwork.texture = artworkImage;
     }
 
 }
