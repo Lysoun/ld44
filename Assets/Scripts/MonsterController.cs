@@ -9,7 +9,7 @@ public class MonsterController : MonoBehaviour
 	public Sprite targetCard_sprite;
 	public Sprite targetPlayer_sprite;
 
-	private string Pattern;
+	private string pattern;
 	private int maxHealth;
 	private int speed;
 	private int armor;
@@ -39,23 +39,27 @@ public class MonsterController : MonoBehaviour
         //actionTarget.SetActive(false);
         //Init();	
     }
-    
+
     /// <summary>
     /// Initialize the Monster Stat. If its sprite would be changeable, will be done here
     /// </summary>
-    public void Init() {
+    public void Init(string attackOrder = "CP", int healthValue = 20, int speedValue = 10, int armorValue = 0, int attackValue = 5, string name = "RandoMonster", Sprite newSprite = null) {
 		//Stats
-		Pattern = "CP";
+		pattern = "CP";
 		maxHealth = 20;
 		speed = 10;
 		armor = 0;
         attack = 7;
 		monsterName = "RandoMonster";
 		health = maxHealth;
-		patternIndex = 0;//Random?
+        patternIndex = Random.Range(0, monsterName.Length);
         
 
         //Update UI
+        if (newSprite != null)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = newSprite;
+        }
         healthBar.GetComponent<Slider>().maxValue = maxHealth;
         healthBar.GetComponent<Slider>().value = health;
 
@@ -71,7 +75,8 @@ public class MonsterController : MonoBehaviour
     /// </summary>
     public void BeginTurn() {
         actionTarget.GetComponent<Image>().sprite = null;
-        currentTarget = (Action) System.Enum.Parse(typeof(Action), Pattern[patternIndex].ToString());
+        patternIndex = (patternIndex + 1) % pattern.Length;
+        currentTarget = (Action) System.Enum.Parse(typeof(Action), pattern[patternIndex].ToString());
         switch(currentTarget)
         {
             case Action.C:
@@ -84,7 +89,7 @@ public class MonsterController : MonoBehaviour
                 Debug.Log("Error ><");
                 break;
         }
-		patternIndex = (patternIndex + 1) % Pattern.Length;
+		patternIndex = (patternIndex + 1) % pattern.Length;
         actionTarget.SetActive(true);
 		combatManager.StateFinish(this.gameObject, Combat_State.Begin_Turn);
 	}
@@ -101,8 +106,8 @@ public class MonsterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown("z")) {
-            Init();
+        /*if(Input.GetKeyDown("z")) {
+            Init(attackOrder: "CCCCCP", name:"Graou", attackValue:666, newSprite:targetCard_sprite);
           }
           if (Input.GetKeyDown("a")) {
 			BeginTurn();
@@ -118,7 +123,7 @@ public class MonsterController : MonoBehaviour
         if (Input.GetKeyDown("d"))
         {
             EndCombat();
-        }
+        }*/
     }
 
     /// <summary>
