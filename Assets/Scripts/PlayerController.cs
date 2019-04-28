@@ -157,6 +157,11 @@ public class PlayerController : MonoBehaviour
         lifePoints -= lp;
     }
 
+    public void PlayedCard(Card card)
+    {
+        bool res = hand.Remove(card);
+        Debug.Log(res);
+    }
 
     public void PickedCard(GameObject card)
     {
@@ -166,7 +171,7 @@ public class PlayerController : MonoBehaviour
         {
             isPlaying = false;
             combatManager.Choosen_Card(card.GetComponent<Card>());
-            hand.Remove(card.GetComponent<Card>());
+            // hand.Remove(card.GetComponent<Card>());
             combatManager.StateFinish(this.gameObject, Combat_State.Player_Choose);
         }
         else if (isSacrificing)
