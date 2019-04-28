@@ -19,6 +19,7 @@ public class CombatManager : MonoBehaviour
 {
  
     public MonsterController monster;
+    public Animator monster_anim;
     public PlayerController player;
     public ActiveCard activeCard;
     public PreviewCardDisplay preview_Display;
@@ -232,6 +233,11 @@ public class CombatManager : MonoBehaviour
 
     private void Turn_Resolution()
     {
+        StartCoroutine(Combat_Coroutine());
+    }
+
+    IEnumerator Combat_Coroutine()
+    {
         int speed_card = activeCard.card.getSpeedValue();
         int speed_monster = monster.Speed;
 
@@ -241,6 +247,10 @@ public class CombatManager : MonoBehaviour
             int damage = activeCard.card.getAttackValue() - monster.Armor;
             monster.TakeDamage(damage);
             Debug.Log("Attack first : card fait " + damage.ToString() + " dégats au monstre");
+            activeCard.card.GetComponent<Animator>().SetTrigger("Attack");
+            monster_anim.SetTrigger("Hurt");
+            yield return new WaitForSeconds(1);
+
             if (monster.Health > 0)
             {
                 damage = monster.Attack - activeCard.card.getArmorValue();
@@ -248,13 +258,20 @@ public class CombatManager : MonoBehaviour
                 {
                     Debug.Log("Attack second : monstre fait " + damage.ToString() + " dégats à la carte");
                     activeCard.TakeDamage(damage);
+                    monster_anim.SetTrigger("Attack");
+                    activeCard.card.GetComponent<Animator>().SetTrigger("Hurt");
+                    yield return new WaitForSeconds(1);
                 }
                 else
                 {
                     Debug.Log("Attack second : monstre fait " + damage.ToString() + " dégats au joueur");
                     player.TakeDamage(damage);
+                    monster_anim.SetTrigger("AttackPlayer");
+                    //activeCard.card.GetComponent<Animator>().SetTrigger("Hurt");
+                    // Anim Dégat PV
+                    yield return new WaitForSeconds(1);
                 }
-                
+
             }
         }
         else
@@ -266,11 +283,18 @@ public class CombatManager : MonoBehaviour
             {
                 Debug.Log("Attack first : monstre fait " + damage.ToString() + " dégats à la carte");
                 activeCard.TakeDamage(damage);
+                monster_anim.SetTrigger("Attack");
+                activeCard.card.GetComponent<Animator>().SetTrigger("Hurt");
+                yield return new WaitForSeconds(1);
             }
             else
             {
                 Debug.Log("Attack first : monstre fait " + damage.ToString() + " dégats au joueur");
                 player.TakeDamage(damage);
+                monster_anim.SetTrigger("AttackPlayer");
+                //activeCard.card.GetComponent<Animator>().SetTrigger("Hurt");
+                // Anim Dégat PV
+                yield return new WaitForSeconds(1);
             }
 
             if (activeCard.card.getHealthValue() > 0)
@@ -278,6 +302,9 @@ public class CombatManager : MonoBehaviour
                 damage = activeCard.card.getAttackValue() - monster.Armor;
                 Debug.Log("Attack second : card fait " + damage.ToString() + " dégats au monstre");
                 monster.TakeDamage(damage);
+                activeCard.card.GetComponent<Animator>().SetTrigger("Attack");
+                monster_anim.SetTrigger("Hurt");
+                yield return new WaitForSeconds(1);
             }
         }
 
