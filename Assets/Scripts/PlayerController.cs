@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    const int MAX_LIFE_POINTS = 10;
+    const int MAX_LIFE_POINTS = 1000;
     const int STARTING_HAND_SIZE = 5;
 
     public List<GameObject> Card_Prefab_At_Beginning;
@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
         foreach (Card card in hand)
         {
             card.transform.SetParent(canvas_hand.transform);
+            // card.GetComponent<Animator>().SetTrigger("Idle");
         }
         
         for (int i = 0; i < hand.Count; i++)
@@ -57,12 +58,6 @@ public class PlayerController : MonoBehaviour
             float x_pos = -canvas_transform.rect.width / 2 + (i + 1) * canvas_transform.rect.width / (hand.Count + 1);
 
             card_transform.anchoredPosition = new Vector2(x_pos, 0f);
-
-            /*RectTransform canvas_rect = canvas_hand.GetComponent<RectTransform>();
-            Debug.Log(canvas_rect.position);
-            Debug.Log(canvas_rect.rect.width);
-            hand[i].GetComponent<RectTransform>().position = canvas_rect.position + i * canvas_rect.rect.width / hand.Count * new Vector3(1, 0, 0);
-            hand[i].transform.position = canvas_rect.position + canvas_rect.rect.width * new Vector3(1, 0, 0);*/
         }
     }
 
@@ -99,6 +94,8 @@ public class PlayerController : MonoBehaviour
     public void DiscardCard(Card card)
     {
         deck.AddToDiscard(card);
+        card.transform.SetParent(card_container.transform);
+        card.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         // combatManager.StateFinish(this.gameObject, Combat_State.)
     }
 
