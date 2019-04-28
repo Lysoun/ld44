@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MonsterController : MonoBehaviour
 {
-    //public CombatManager combatManager;
+    public CombatManager combatManager;
 	public Sprite targetCard_sprite;
 	public Sprite targetPlayer_sprite;
 
@@ -45,7 +45,7 @@ public class MonsterController : MonoBehaviour
     /// </summary>
     public void Init(string attackOrder = "CP", int healthValue = 20, int speedValue = 10, int armorValue = 0, int attackValue = 5, string name = "RandoMonster", Sprite newSprite = null) {
 		//Stats
-		Pattern = "CP";
+		pattern = "CP";
 		maxHealth = 20;
 		speed = 10;
 		armor = 0;
@@ -75,6 +75,7 @@ public class MonsterController : MonoBehaviour
     /// </summary>
     public void BeginTurn() {
         actionTarget.GetComponent<Image>().sprite = null;
+        patternIndex = (patternIndex + 1) % pattern.Length;
         currentTarget = (Action) System.Enum.Parse(typeof(Action), pattern[patternIndex].ToString());
         switch(currentTarget)
         {
