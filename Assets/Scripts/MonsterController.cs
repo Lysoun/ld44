@@ -34,9 +34,9 @@ public class MonsterController : MonoBehaviour
     {
         //healthBar = gameObject.transform.Find("Life").gameObject;
         //actionTarget = gameObject.transform.Find("Action").gameObject;
-        gameObject.GetComponent<SpriteRenderer>().enabled = false;
-        healthBar.SetActive(false);
-        actionTarget.SetActive(false);
+        //gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        //healthBar.SetActive(false);
+        //actionTarget.SetActive(false);
         //Init();	
     }
     
@@ -49,7 +49,7 @@ public class MonsterController : MonoBehaviour
 		maxHealth = 20;
 		speed = 10;
 		armor = 0;
-        attack = 5;
+        attack = 7;
 		monsterName = "RandoMonster";
 		health = maxHealth;
 		patternIndex = 0;//Random?
@@ -122,6 +122,14 @@ public class MonsterController : MonoBehaviour
     }
 
     /// <summary>
+    /// End of turn for monster
+    /// </summary>
+    public void EndTurn()
+    {
+        combatManager.StateFinish(this.gameObject, Combat_State.End_Turn);
+    }
+
+    /// <summary>
     /// Clean the Monster after battle
     /// </summary>
     public void EndCombat()
@@ -133,10 +141,10 @@ public class MonsterController : MonoBehaviour
     /// Get the Attack type/target, and hide the visible symbol
     /// </summary>
     /// <returns>The ID of the attack</returns>
-    int TypeAttack()
+    public Action TypeAttack()
     {
         actionTarget.SetActive(false);
-        return (int)currentTarget;
+        return currentTarget;
     }
 
     public int Health

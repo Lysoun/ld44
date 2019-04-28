@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Tank
   m_EditorClassIdentifier: 
   type: Tank
-  healthMin: 2
-  healthMax: 3
+  healthMin: 1
+  healthMax: 20
   atkMin: 2
   atkMax: 3
   armorMin: 2

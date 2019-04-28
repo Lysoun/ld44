@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,17 +10,18 @@ public class PlayerController : MonoBehaviour
 
     public List<GameObject> Card_Prefab_At_Beginning;
     public List<int> multiplicity;
-    public GameObject canvas_hand;
 
-    public GameObject card_Container;
+    public GameObject canvas_hand;
+    public GameObject card_container;
 
     private int lifePoints;
     private Card activeCard; // TODO ActiveCardController
-    public List<Card> hand;
+    private List<Card> hand;
     Deck deck; // deck has discard pile
 
     public CombatManager combatManager;
     public PlayerCardPicker picker;
+    public Slider healthBar;
 
     private bool isPlaying;
     private bool isSacrificing;
@@ -27,13 +29,15 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        healthBar.maxValue = MAX_LIFE_POINTS;
+        healthBar.minValue = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         PositionHand();
+        healthBar.value = lifePoints;
     }
 
     private void PositionHand()
@@ -45,18 +49,28 @@ public class PlayerController : MonoBehaviour
         
         for (int i = 0; i < hand.Count; i++)
         {
-            RectTransform canvas_rect = canvas_hand.GetComponent<RectTransform>();
-            Debug.Log(canvas_rect.rect.width);
+            Card card = hand[i];
+            RectTransform card_transform = card.GetComponent<RectTransform>();
 
+            RectTransform canvas_transform = canvas_hand.GetComponent<RectTransform>();
+
+            float x_pos = -canvas_transform.rect.width / 2 + (i + 1) * canvas_transform.rect.width / (hand.Count + 1);
+
+            card_transform.anchoredPosition = new Vector2(x_pos, 0f);
+
+            /*RectTransform canvas_rect = canvas_hand.GetComponent<RectTransform>();
+            Debug.Log(canvas_rect.position);
+            Debug.Log(canvas_rect.rect.width);
             hand[i].GetComponent<RectTransform>().position = canvas_rect.position + i * canvas_rect.rect.width / hand.Count * new Vector3(1, 0, 0);
-            hand[i].GetComponent<RectTransform>().position = canvas_rect.position + canvas_rect.rect.width * new Vector3(1, 0, 0);
+            hand[i].transform.position = canvas_rect.position + canvas_rect.rect.width * new Vector3(1, 0, 0);*/
         }
     }
 
     #region PUBLIC FUNCTIONS
     public void BeginTurn()
     {
-        deck.Draw();
+        Card drawn_card = deck.Draw();
+        hand.Add(drawn_card);
         combatManager.StateFinish(this.gameObject, Combat_State.Begin_Turn);
     }
 
@@ -69,8 +83,8 @@ public class PlayerController : MonoBehaviour
     public void EndTurn()
     {
         // discard active card
-        deck.AddToDiscard(activeCard);
-        activeCard = null;
+        //deck.AddToDiscard(activeCard);
+        //activeCard = null;
         combatManager.StateFinish(this.gameObject, Combat_State.End_Turn);
     }
 
@@ -91,7 +105,7 @@ public class PlayerController : MonoBehaviour
         deck = new Deck();
 
         // Populate deck
-        deck.Populate(Card_Prefab_At_Beginning, multiplicity, card_Container);
+        deck.Populate(Card_Prefab_At_Beginning, multiplicity, card_container);
 
         // Init life points
         lifePoints = MAX_LIFE_POINTS;
@@ -127,23 +141,22 @@ public class PlayerController : MonoBehaviour
     public void Sacrifice()
     {
         picker.enabled = true;
-
+        isSacrificing = true;
         // TODO return sacrificed
         // pick a card and give it to sacrifice
         //Card card = pickedCard();
-        Card card = null;
-        combatManager.Sacrificed_Card(card.getCostValue());
-        hand.Remove(card);
-        Destroy(card.gameObject);
+        //Card card = null;
+        //combatManager.Sacrificed_Card(card.getCostValue());
+        //hand.Remove(card);
+        //Destroy(card.gameObject);
     }
 
     // Mofify player's life points by the lp value, which can be negative or positive
     public void TakeDamage(int lp)
     {
-        lifePoints += lp;
+        lifePoints -= lp;
     }
 
-    #endregion
 
     public void PickedCard(GameObject card)
     {
@@ -153,12 +166,15 @@ public class PlayerController : MonoBehaviour
         {
             isPlaying = false;
             combatManager.Choosen_Card(card.GetComponent<Card>());
+            hand.Remove(card.GetComponent<Card>());
             combatManager.StateFinish(this.gameObject, Combat_State.Player_Choose);
         }
         else if (isSacrificing)
         {
             isSacrificing = false;
             combatManager.Sacrificed_Card(card.GetComponent<Card>().getCostValue());
+            hand.Remove(card.GetComponent<Card>());
+            Destroy(card);
             // deck.destroy(card);
             combatManager.StateFinish(this.gameObject, Combat_State.Sacrifising);
         }
@@ -168,4 +184,7 @@ public class PlayerController : MonoBehaviour
         }
         
     }
+    
+    
+    #endregion
 }

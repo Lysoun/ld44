@@ -121,6 +121,28 @@ public class Card : MonoBehaviour
         graphicsChildren.SetActive(true);
     }
 
+    public void RandomizeValues()
+    {
+        typeValue = card.type;
+  
+        healthValue = Random.Range(card.healthMin, card.healthMax + 1);
+        atkValue = Random.Range(card.atkMin, card.atkMax + 1);
+        armorValue = Random.Range(card.armorMin, card.armorMax + 1);
+        speedValue = Random.Range(card.speedMin, card.speedMax + 1);
+        costValue = card.cost;
+        artworkImage = card.artwork;
+
+        typeText.SetText(typeValue);
+
+        healthText.SetText(healthValue.ToString());
+        atkText.SetText(atkValue.ToString());
+        armorText.SetText(armorValue.ToString());
+        speedText.SetText(speedValue.ToString());
+
+        costText.SetText(costValue.ToString());
+
+        artwork.texture = artworkImage;
+    }
 
     ///////////////////////////////////////////////////////////////////
     /// Getter of all the statistics.

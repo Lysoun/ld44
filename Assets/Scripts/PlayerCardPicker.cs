@@ -17,7 +17,7 @@ public class PlayerCardPicker : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
             if (hit.collider != null)
             {
-                Debug.Log(hit.collider.gameObject.name);
+                // Debug.Log(hit.collider.gameObject.name);
 
                 if (hit.collider.gameObject.GetComponent<Card>() != null)
                 {

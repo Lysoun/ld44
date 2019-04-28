@@ -26,7 +26,7 @@ public class Deck
             for (int j = 0; j < multiplicity[i]; j++)
             {
                 GameObject new_card = GameObject.Instantiate(Card_Prefab_At_Beginning[i], parent.transform);
-
+                new_card.GetComponent<Card>().RandomizeValues();
                 AddToDeck(new_card.GetComponent<Card>());
             }
         }
@@ -41,6 +41,7 @@ public class Deck
             if (discardPile.Count < 1)
             {
                 // TODO you lose because you have no cards
+                Debug.Log("Plus de carte, pouet");
             }
             else
             {
@@ -50,7 +51,7 @@ public class Deck
         }
 
         System.Random rand = new System.Random();
-        int index = rand.Next(0, cards.Count);
+        int index = Random.Range(0, cards.Count);
         Card drawnCard = cards[index];
         drawnCard.Display();
         cards.Remove(drawnCard);
