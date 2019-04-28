@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
 
     public CombatManager combatManager;
     public PlayerCardPicker picker;
-    public Slider healthBar;
+    //public Slider healthBar;
+    public Image healthBar;
 
     private bool isPlaying;
     private bool isSacrificing;
@@ -29,15 +30,17 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        healthBar.maxValue = MAX_LIFE_POINTS;
-        healthBar.minValue = 0;
+        //healthBar.maxValue = MAX_LIFE_POINTS;
+        //healthBar.minValue = 0;
+        healthBar.fillAmount = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
         PositionHand();
-        healthBar.value = lifePoints;
+        //healthBar.value = lifePoints;
+        healthBar.fillAmount = (float)lifePoints / MAX_LIFE_POINTS;
     }
 
     private void PositionHand()
