@@ -173,7 +173,7 @@ public class Card : MonoBehaviour
         armorValue = Random.Range(card.armorMin, card.armorMax + 1);
         speedValue = Random.Range(card.speedMin, card.speedMax + 1);
    
-        costValue = card.cost;
+        costValue = card.getCost();
         
         xpToUpValue = card.xpMax;
         xpValue = card.getXp();
@@ -276,6 +276,7 @@ public class Card : MonoBehaviour
             atkValue = 0;
             armorValue = 0;
             speedValue = 0;
+            costValue = 0;
             artworkImage = Resources.Load("Characters/Cadaver") as Texture;
             artwork.texture = artworkImage;
         }
@@ -309,7 +310,11 @@ public class Card : MonoBehaviour
         healthText.SetText(healthValue.ToString());
         time_down.fillAmount = (Time.time%5)/5;
         time_up.fillAmount = 1 - (Time.time % 5) / 5;
-
+        if ((healthValue > 0) && (ageValue < 4))
+        {
+            costValue = costCalcul();
+            costText.SetText(costValue.ToString());
+        }
     }
 
     public void Hide()
@@ -330,7 +335,7 @@ public class Card : MonoBehaviour
         atkValue = Random.Range(card.atkMin, card.atkMax + 1);
         armorValue = Random.Range(card.armorMin, card.armorMax + 1);
         speedValue = Random.Range(card.speedMin, card.speedMax + 1);
-        costValue = card.cost;
+        costValue = card.getCost();
         //artworkImage = card.artwork;  card.artwork n'existe plus.
 
         typeText.SetText(Card_ClassToString(typeValue));
@@ -495,6 +500,11 @@ public class Card : MonoBehaviour
                 ageText.SetText("IV");
                 break;
         }
+    }
+
+    public int costCalcul()
+    {
+        return healthValue + ((atkValue + armorValue + speedValue) / 3);
     }
 
     ///////////////////////////////////////////////////////////////////
