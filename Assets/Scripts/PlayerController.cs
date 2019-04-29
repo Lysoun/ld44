@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    const int MAX_LIFE_POINTS = 1000;
+    const int MAX_LIFE_POINTS = 20;
     const int STARTING_HAND_SIZE = 5;
 
     public List<GameObject> Card_Prefab_At_Beginning;
