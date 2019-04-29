@@ -114,8 +114,15 @@ public class ActiveCard : MonoBehaviour
     /// </summary>
     public void DestroyCard()
     {
-        Destroy(card.gameObject);
+        Destroy(card.gameObject, 1);
+        StartCoroutine(DestroyCoroutine());
+    }
+
+    IEnumerator DestroyCoroutine()
+    {
+        card.GetComponent<Animator>().SetTrigger("Dead");
         card = null;
+        yield return new WaitForSeconds(1);
         display.Hide();
     }
 

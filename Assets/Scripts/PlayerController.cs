@@ -200,7 +200,8 @@ public class PlayerController : MonoBehaviour
             // isSacrificing = true;
             combatManager.Sacrificed_Card(card.GetComponent<Card>().getCostValue());
             hand.Remove(card.GetComponent<Card>());
-            Destroy(card);
+            card.GetComponent<Animator>().SetTrigger("Dead");
+            Destroy(card, 1);
             // deck.destroy(card);
             // combatManager.StateFinish(this.gameObject, Combat_State.Sacrifising);
         }

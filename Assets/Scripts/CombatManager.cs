@@ -327,6 +327,7 @@ public class CombatManager : MonoBehaviour
                 monster_anim.SetTrigger("Hurt");
                 yield return new WaitForSeconds(1);
             }
+            
         }
 
         resolution_finished = true;
