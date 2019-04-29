@@ -123,36 +123,36 @@ public class Card : MonoBehaviour
     /// Fixed level up variables.
     /// 
 
-    private int tankHealth2 = 3;
+    private int tankHealth2 = 2;
     private int tankHealth3 = -1;
-    private int healerHealth2 = 2;
+    private int healerHealth2 = 0;
     private int healerHealth3 = 0;
-    private int mageHealth2 = 1;
-    private int mageHealth3 = -3;
+    private int mageHealth2 = 0;
+    private int mageHealth3 = -1;
     private int rangerHealth2 = 1;
-    private int rangerHealth3 = -2;
+    private int rangerHealth3 = -1;
 
-    private int tankAtk2 = 2;
+    private int tankAtk2 = 1;
     private int tankAtk3 = -1;
     private int healerAtk2 = 0;
-    private int healerAtk3 = -2;
-    private int mageAtk2 = 3;
-    private int mageAtk3 = 2;
-    private int rangerAtk2 = 4;
-    private int rangerAtk3 = 1;
+    private int healerAtk3 = -1;
+    private int mageAtk2 = 2;
+    private int mageAtk3 = 1;
+    private int rangerAtk2 = 2;
+    private int rangerAtk3 = 0;
 
     private int tankSpeed2 = 0;
     private int tankSpeed3 = -1;
     private int healerSpeed2 = 1;
-    private int healerSpeed3 = 0;
-    private int mageSpeed2 = 1;
+    private int healerSpeed3 = 1;
+    private int mageSpeed2 = 0;
     private int mageSpeed3 = -2;
-    private int rangerSpeed2 = 3;
+    private int rangerSpeed2 = 2;
     private int rangerSpeed3 = 0;
 
-    private int tankArmor2 = 3;
-    private int tankArmor3 = 3;
-    private int healerArmor2 = 1;
+    private int tankArmor2 = 2;
+    private int tankArmor3 = 1;
+    private int healerArmor2 = 0;
     private int healerArmor3 = 0;
     private int mageArmor2 = 0;
     private int mageArmor3 = 0;
