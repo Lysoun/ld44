@@ -47,9 +47,9 @@ public class MonsterController : MonoBehaviour
 		//Stats
 		pattern = "CP";
 		maxHealth = 20;
-		speed = 10;
-		armor = 0;
-        attack = 4;
+		speed = 2;
+		armor = 1;
+        attack = 2;
 		monsterName = "RandoMonster";
 		health = maxHealth;
         patternIndex = Random.Range(0, monsterName.Length);
