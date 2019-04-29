@@ -23,6 +23,7 @@ public class CombatManager : MonoBehaviour
     public PlayerController player;
     public ActiveCard activeCard;
     public PreviewCardDisplay preview_Display;
+    public TitlesController titlesController;
 
     public Combat_State current_state;
     public GameObject endTurn_Buttons;
@@ -44,10 +45,12 @@ public class CombatManager : MonoBehaviour
     private bool resolution_finished;
     private bool endTurnChoiceMade;
 
+    private int number_turn;
 
     // Start is called before the first frame update
     void Start()
     {
+        number_turn = 1;
         ChangeState(Combat_State.Init);
     }
 
@@ -194,6 +197,8 @@ public class CombatManager : MonoBehaviour
 
     private void Begin_Turn()
     {
+        titlesController.New_Turn(number_turn++, "Beginning of new turn");
+
         monster_beginTurnReady = false;
         player_beginTurnReady = false;
         activeCard_beginTurnReady = false;
@@ -208,6 +213,7 @@ public class CombatManager : MonoBehaviour
 
     private void Player_Choose()
     {
+        titlesController.New_Phase("Choose a card");
         preview_Display.Hide();
         selectedCard = null;
         player.Play();
@@ -224,6 +230,7 @@ public class CombatManager : MonoBehaviour
 
     private void Paying()
     {
+        titlesController.New_Phase("Invocation");
         preview_Display.Hide();
         activeCard.NewCard(selectedCard.GetComponent<Card>());
         player.Sacrifice();
@@ -233,6 +240,7 @@ public class CombatManager : MonoBehaviour
 
     private void Turn_Resolution()
     {
+        titlesController.New_Phase("Fight !");
         StartCoroutine(Combat_Coroutine());
     }
 
