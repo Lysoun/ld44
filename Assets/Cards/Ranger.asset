@@ -10,18 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b9b492fbce58e84ea4f619ab09ded32, type: 3}
-  m_Name: Mage
+  m_Name: Ranger
   m_EditorClassIdentifier: 
-  type: Wizard
+  type: 3
   healthMin: 1
   healthMax: 2
   atkMin: 1
   atkMax: 2
-  armorMin: 1
-  armorMax: 2
-  speedMin: 1
-  speedMax: 2
-  ageMin: 0
-  ageMax: 0
-  cost: 1
-  xpMax: 0
+  armorMin: 0
+  armorMax: 1
+  speedMin: 2
+  speedMax: 3
+  xpMax: 5

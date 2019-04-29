@@ -4423,8 +4423,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Card_Prefab_At_Beginning:
+  - {fileID: 4954937847747901231, guid: bfb5665d7882914458e106ac9df73c0b, type: 3}
   - {fileID: 8595813447316864633, guid: 232237c92c3e00f42953f51eacfbb38e, type: 3}
-  multiplicity: 08000000
+  - {fileID: 8218295123833228872, guid: 78d514632488dd14686661058e4af01b, type: 3}
+  - {fileID: 959396061807943895, guid: 3508b9259c4a6a8418ebb77a22f01d8f, type: 3}
+  multiplicity: 02000000020000000200000002000000
   canvas_hand: {fileID: 424430582}
   card_container: {fileID: 1121427868}
   deck_text: {fileID: 1744875942}

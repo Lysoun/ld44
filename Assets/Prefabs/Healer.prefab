@@ -10,8 +10,14 @@ PrefabInstance:
     - target: {fileID: 2068293293759588125, guid: 5d473e48c6dece846aeb543f1a25c2da,
         type: 3}
       propertyPath: m_Name
-      value: Mage
+      value: Healer
       objectReference: {fileID: 0}
+    - target: {fileID: 2068293293759588129, guid: 5d473e48c6dece846aeb543f1a25c2da,
+        type: 3}
+      propertyPath: card
+      value: 
+      objectReference: {fileID: 11400000, guid: 09cdfd3bb6ad15546911c7b6a79f7d20,
+        type: 2}
     - target: {fileID: 2068293293759588124, guid: 5d473e48c6dece846aeb543f1a25c2da,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -117,11 +123,5 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2068293293759588129, guid: 5d473e48c6dece846aeb543f1a25c2da,
-        type: 3}
-      propertyPath: card
-      value: 
-      objectReference: {fileID: 11400000, guid: 09cdfd3bb6ad15546911c7b6a79f7d20,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d473e48c6dece846aeb543f1a25c2da, type: 3}

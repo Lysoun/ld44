@@ -12,16 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b9b492fbce58e84ea4f619ab09ded32, type: 3}
   m_Name: Wizard
   m_EditorClassIdentifier: 
-  type: Wizard
+  type: 2
   healthMin: 1
-  healthMax: 3
-  atkMin: 3
-  atkMax: 5
+  healthMax: 2
+  atkMin: 2
+  atkMax: 3
   armorMin: 0
-  armorMax: 2
-  speedMin: 1
-  speedMax: 3
-  ageMin: 1
-  ageMax: 3
-  cost: 3
+  armorMax: 1
+  speedMin: 0
+  speedMax: 1
   xpMax: 5
