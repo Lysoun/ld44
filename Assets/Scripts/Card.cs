@@ -97,7 +97,7 @@ public class Card : MonoBehaviour
     /// <summary>
     /// Age of the card.
     /// </summary>
-    private int ageValue;
+    private int ageValue = 1;
 
     /// <summary>
     /// Cost of the card.
@@ -166,7 +166,7 @@ public class Card : MonoBehaviour
     {
         typeValue = card.type;
         
-        ageValue = Random.Range(card.getAgeMin(), card.getAgeMax() + 1);
+        int ageValueAux = Random.Range(card.getAgeMin(), card.getAgeMax() + 1); 
 
         healthValue = Random.Range(card.healthMin, card.healthMax + 1);
         atkValue = Random.Range(card.atkMin, card.atkMax + 1);
@@ -179,6 +179,11 @@ public class Card : MonoBehaviour
         xpValue = card.getXp();
 
         typeText.SetText(Card_ClassToString(typeValue));
+
+        while (ageValue != ageValueAux)
+        {
+            AddXp(xpToUpValue);
+        }
 
         healthText.SetText(healthValue.ToString());
         atkText.SetText(atkValue.ToString());
