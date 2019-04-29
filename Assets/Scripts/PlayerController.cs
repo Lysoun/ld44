@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class PlayerController : MonoBehaviour
 
     public GameObject canvas_hand;
     public GameObject card_container;
+    public TextMeshProUGUI deck_text;
+
 
     private int lifePoints;
     private Card activeCard; // TODO ActiveCardController
@@ -41,6 +44,7 @@ public class PlayerController : MonoBehaviour
         PositionHand();
         //healthBar.value = lifePoints;
         healthBar.fillAmount = (float)lifePoints / MAX_LIFE_POINTS;
+        deck_text.text = "Deck: " + deck.cards.Count.ToString() + " cards\nDiscard: " + deck.discardPile.Count.ToString() + " cards";
     }
 
     private void PositionHand()

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Deck
 {
-    List<Card> cards;
-    List<Card> discardPile;
+    public List<Card> cards;
+    public List<Card> discardPile;
 
     public Deck()
     {
