@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//Prochain coup, combien tu tape...
 
 public class MonsterController : MonoBehaviour
 {
-	
+    public CombatManager combatManager;
 	public Sprite targetCard_sprite;
 	public Sprite targetPlayer_sprite;
-	
-	private string Pattern;
+
+	private string pattern;
 	private int maxHealth;
 	private int speed;
 	private int armor;
@@ -18,47 +17,66 @@ public class MonsterController : MonoBehaviour
 	private string monsterName;
 	private int health;
 	private int patternIndex;
-    private GameObject healthBar;
-    private GameObject actionTarget;
+    public GameObject healthBar;
+    public GameObject actionTarget;
     private Action currentTarget;
 
-    enum Action {C, P};
-    // Start is called before the first frame update
+    /// <summary>
+    /// C is Card, P is Player
+    /// </summary>
+    public enum Action {C, P};
+
+
+    /// <summary>
+    /// Hide everything, get reference on its children
+    /// </summary>
     void Start()
     {
-        healthBar = gameObject.transform.Find("Life").gameObject;
-        actionTarget = gameObject.transform.Find("Action").gameObject;
-       // gameObject.SetActive(false);
-        healthBar.SetActive(false);
-        actionTarget.SetActive(false);
+        //healthBar = gameObject.transform.Find("Life").gameObject;
+        //actionTarget = gameObject.transform.Find("Action").gameObject;
+        //gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        //healthBar.SetActive(false);
+        //actionTarget.SetActive(false);
         //Init();	
     }
-    
-    void Init() {
+
+    /// <summary>
+    /// Initialize the Monster Stat. If its sprite would be changeable, will be done here
+    /// </summary>
+    public void Init(string attackOrder = "CP", int healthValue = 20, int speedValue = 10, int armorValue = 0, int attackValue = 5, string name = "RandoMonster", Sprite newSprite = null) {
 		//Stats
-		Pattern = "CP";
+		pattern = "CP";
 		maxHealth = 20;
-		speed = 10;
-		armor = 0;
-        attack = 5;
-		monsterName = "Vaporeon";
+		speed = 2;
+		armor = 1;
+        attack = 2;
+		monsterName = "RandoMonster";
 		health = maxHealth;
-		patternIndex = 0;//Random?
+        patternIndex = Random.Range(0, monsterName.Length);
         
 
         //Update UI
+        if (newSprite != null)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = newSprite;
+        }
         healthBar.GetComponent<Slider>().maxValue = maxHealth;
         healthBar.GetComponent<Slider>().value = health;
 
-        //gameObject.SetActive(true);
+        gameObject.GetComponentInChildren<SpriteRenderer>().enabled = true;
         healthBar.SetActive(true);
 
         //Send finish signal
-        //CombatManager.StateFinish(this, CombatManager.State.Init);
+        combatManager.StateFinish(this.gameObject, Combat_State.Init);
     }
 
-    void BeginTurn() {
-        currentTarget = (Action) System.Enum.Parse(typeof(Action), Pattern[patternIndex].ToString());
+    /// <summary>
+    /// Generate next Targer, upload visible target
+    /// </summary>
+    public void BeginTurn() {
+        actionTarget.GetComponent<Image>().sprite = null;
+        patternIndex = (patternIndex + 1) % pattern.Length;
+        currentTarget = (Action) System.Enum.Parse(typeof(Action), pattern[patternIndex].ToString());
         switch(currentTarget)
         {
             case Action.C:
@@ -71,12 +89,16 @@ public class MonsterController : MonoBehaviour
                 Debug.Log("Error ><");
                 break;
         }
-		patternIndex = (patternIndex + 1) % Pattern.Length;
+		patternIndex = (patternIndex + 1) % pattern.Length;
         actionTarget.SetActive(true);
-		//CombatManager.StateFinish(this, CombatManager.State.BeginTurn);
+		combatManager.StateFinish(this.gameObject, Combat_State.Begin_Turn);
 	}
 
-    void TakeDamage(int damage) {
+    /// <summary>
+    /// Update monster life variable and life bar
+    /// </summary>
+    /// <param name="damage"> The damage taken</param>
+    public void TakeDamage(int damage) {
         health = health - damage;
         healthBar.GetComponent<Slider>().value = health;
     }
@@ -84,8 +106,8 @@ public class MonsterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown("z")) {
-            Init();
+        /*if(Input.GetKeyDown("z")) {
+            Init(attackOrder: "CCCCCP", name:"Graou", attackValue:666, newSprite:targetCard_sprite);
           }
           if (Input.GetKeyDown("a")) {
 			BeginTurn();
@@ -96,47 +118,90 @@ public class MonsterController : MonoBehaviour
         }
         if (Input.GetKeyDown("c"))
         {
-            Debug.Log("Monster " + GetName() + " with " + GetAttack().ToString() + " strength attacked target n° " + TypeAttack().ToString());
+            Debug.Log("Monster " + this.MonsterName + " with " + this.Attack + " strength attacked target n° " + TypeAttack().ToString());
         }
         if (Input.GetKeyDown("d"))
         {
             EndCombat();
-        }
+        }*/
     }
 
-    void EndCombat()
+    /// <summary>
+    /// End of turn for monster
+    /// </summary>
+    public void EndTurn()
+    {
+        combatManager.StateFinish(this.gameObject, Combat_State.End_Turn);
+    }
+
+    /// <summary>
+    /// Clean the Monster after battle
+    /// </summary>
+    public void EndCombat()
     {
         Destroy(gameObject);
     }
 
-    int TypeAttack()
+    /// <summary>
+    /// Get the Attack type/target, and hide the visible symbol
+    /// </summary>
+    /// <returns>The ID of the attack</returns>
+    public Action TypeAttack()
     {
         actionTarget.SetActive(false);
-        return (int)currentTarget;
+        return currentTarget;
     }
 
-    int GetAttack()
+    public int Health
     {
-        return attack;
+        get
+        {
+            return health;
+        }
     }
 
-    int GetArmor()
+    public int Attack
     {
-        return armor;
+        get
+        {
+            return attack;
+        }
+        set
+        {
+            attack = value;
+        }
     }
 
-    int GetSpeed()
+    public int Armor
     {
-        return speed;
+        get
+        {
+            return armor;
+        }
+        set
+        {
+            armor = value;
+        }
     }
-
-    int GetHealth()
+    
+    public int Speed
     {
-        return health;
+        get
+        {
+            return speed;
+        }
+        set
+        {
+            speed = value;
+        }
     }
-
-    string GetName()
+    
+    public string MonsterName
     {
-        return monsterName;
+        get
+        {
+            return monsterName;
+        }
     }
+    
 }
