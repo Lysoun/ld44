@@ -72,6 +72,13 @@ public class PlayerController : MonoBehaviour
         {
             hand.Add(drawn_card);
         }
+        else
+        {
+            if (hand.Count == 0)
+            {
+                combatManager.Loose();
+            }
+        }
         combatManager.StateFinish(this.gameObject, Combat_State.Begin_Turn);
     }
 

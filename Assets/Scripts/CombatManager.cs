@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum Combat_State
 {
@@ -87,6 +88,8 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
+    
+
         PlayerController temp_player = go.GetComponent<PlayerController>();
         if (temp_player != null)
         {
@@ -126,6 +129,16 @@ public class CombatManager : MonoBehaviour
         // TODO with the others.
     }
 
+
+    public void Win()
+    {
+        SceneManager.LoadScene("VictoryScene");
+    }
+
+    public void Loose()
+    {
+        SceneManager.LoadScene("GameOverScene");
+    }
     /// <summary>
     /// Gives the CombatController the card choosen by the player.
     /// </summary>
@@ -341,10 +354,12 @@ public class CombatManager : MonoBehaviour
         if (monster.Health > 0)
         {
             Debug.Log("You lose !");
+            Loose();
         }
         else
         {
             Debug.Log("Yoou win !");
+            Win();
         }
         activeCard.EndCombat();
         monster.EndCombat();
